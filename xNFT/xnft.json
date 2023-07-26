@@ -1,0 +1,21 @@
+{
+  "name": "xNFT Quickstart",
+  "version": "0.0.1",
+  "storage": "aws",
+  "description": "Unity Example",
+  "website": "http://wao.gg",
+  "kind": "app",
+  "tag": "game",
+  "icon": {
+    "md": "./assets/icon.jpg"
+  },
+  "contact": "kimosabe.crypto@gmail.com",
+  "screenshots": [
+    "./assets/screenShot.jpg"
+  ],
+  "entrypoints": {
+    "default": {
+      "web": "https://kimo-do.github.io"
+    }
+  }
+}
