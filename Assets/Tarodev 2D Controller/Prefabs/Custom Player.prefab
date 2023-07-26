@@ -10057,7 +10057,7 @@ Transform:
   m_GameObject: {fileID: 3836054526886193614}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.75, z: 0}
+  m_LocalPosition: {x: 0, y: -0.023, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -10136,7 +10136,7 @@ TrailRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 1, g: 1, b: 1, a: 1}
+      key0: {r: 1, g: 1, b: 1, a: 0.23921569}
       key1: {r: 1, g: 1, b: 1, a: 0}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
@@ -10161,7 +10161,7 @@ TrailRenderer:
       atime6: 0
       atime7: 0
       m_Mode: 0
-      m_ColorSpace: -1
+      m_ColorSpace: 0
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
     numCornerVertices: 0
@@ -15092,7 +15092,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 5, y: 5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3836054526632529483}
@@ -15188,7 +15188,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 1766862958, guid: 5707f5ebcf7e8b440bad2a949b2b5aab, type: 3}
+  m_Sprite: {fileID: -1313414772, guid: 9fde5b59d068a2848b76877aa7527326, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -15209,7 +15209,7 @@ Animator:
   m_GameObject: {fileID: 3836054527376998751}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 4c8cae7307e2d8544a688447cf38853d, type: 2}
+  m_Controller: {fileID: 9100000, guid: 7d2e4c3fd69c3a64fa07e0209fb34488, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -30042,8 +30042,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0.75}
-  m_Size: {x: 0.6, y: 1.5}
+  m_Offset: {x: 0, y: 0.551729}
+  m_Size: {x: 0.6, y: 1.103458}
   m_Direction: 0
 --- !u!70 &3836054527727189971
 CapsuleCollider2D:
@@ -30077,8 +30077,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0.25}
-  m_Size: {x: 1.08, y: 0.5}
+  m_Offset: {x: -0.000000008795105, y: 0.17622136}
+  m_Size: {x: 0.7772027, y: 0.35244688}
   m_Direction: 1
 --- !u!114 &2543603648225544671
 MonoBehaviour:

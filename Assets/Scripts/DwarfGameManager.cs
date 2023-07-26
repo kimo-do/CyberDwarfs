@@ -10,6 +10,8 @@ public class DwarfGameManager : MonoBehaviour
     [SerializeField] private RectTransform livesRect;
     [SerializeField] private GameObject heartTemplate;
     [SerializeField] private GameObject armourTemplate;
+    [SerializeField] private GameObject enemyPfb;
+    [SerializeField] private List<Transform> enemySpawns;
 
     [Header("Settings")]
     [SerializeField] private int defaultLives;
@@ -18,6 +20,8 @@ public class DwarfGameManager : MonoBehaviour
 
     private List<GameObject> spawnedLivesUI = new();
     private List<GameObject> spawnedArmourUI = new();
+
+    private float lastEnemySpawn;
 
     private void Awake()
     {
@@ -28,7 +32,7 @@ public class DwarfGameManager : MonoBehaviour
     void Start()
     {
         Initialize();
-    }
+    }    
 
     private void Initialize()
     {
@@ -79,6 +83,13 @@ public class DwarfGameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (Time.time - lastEnemySpawn > 10f)
+        {
+            GameObject enemy = Instantiate(enemyPfb);
+
+            Vector2 rdnspawnpos = enemySpawns[Random.Range(0, enemySpawns.Count)].position;
+            enemy.transform.position = rdnspawnpos;
+            lastEnemySpawn = Time.time;
+        }
     }
 }
