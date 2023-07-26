@@ -41,12 +41,15 @@ public class DwarfController : MonoBehaviour
         {
             if (Time.time - enemy.LastHitTime > 0.5f)
             {
-                enemy.LastHitTime = Time.time;
+                if (Time.time - enemy.LastGotAttackedTime < 0.6f)
+                {
+                    enemy.LastHitTime = Time.time;
 
-                Vector2 awayFromPlayerDir = enemy.transform.position - transform.position;
-                enemy.Bounce(awayFromPlayerDir);
+                    Vector2 awayFromPlayerDir = enemy.transform.position - transform.position;
+                    enemy.Bounce(awayFromPlayerDir);
 
-                DwarfGameManager.instance.LooseLive();
+                    DwarfGameManager.instance.LooseLive();
+                }
             }
         }
     }

@@ -26,6 +26,7 @@ namespace TarodevController {
         private int _fixedFrame;
         private bool _hasControl = true;
         public float startHoverTime;
+        private float stayHoverTime = 0.6f;
 
         #endregion
 
@@ -563,7 +564,15 @@ namespace TarodevController {
                 if (_hittingWall.collider && Mathf.Abs(_rb.velocity.x) < 0.01f && !_isLeavingWall) _speed.x = 0;
 
                 var xInput = FrameInput.Move.x * (ClimbingLadder ? _stats.LadderShimmySpeedMultiplier : 1);
-                _speed.x = Mathf.MoveTowards(_speed.x, xInput * _stats.MaxSpeed, _currentWallJumpMoveMultiplier * _stats.Acceleration * Time.fixedDeltaTime);
+
+                if (Time.time - startHoverTime < stayHoverTime)
+                {
+                    _speed.x = 0;
+                }
+                else
+                {
+                    _speed.x = Mathf.MoveTowards(_speed.x, xInput * _stats.MaxSpeed, _currentWallJumpMoveMultiplier * _stats.Acceleration * Time.fixedDeltaTime);
+                }
             }
         }
 
@@ -604,7 +613,11 @@ namespace TarodevController {
                 var inAirGravity = _stats.FallAcceleration;
                 if (_endedJumpEarly && _speed.y > 0) inAirGravity *= _stats.JumpEndEarlyGravityModifier;
 
-                if (Time.time - startHoverTime > 1f)
+                if (Time.time - startHoverTime < stayHoverTime)
+                {
+                    _speed.y = 0;
+                }
+                else
                 {
                     _speed.y = Mathf.MoveTowards(_speed.y, -_stats.MaxFallSpeed, inAirGravity * Time.fixedDeltaTime);
                 }
@@ -615,6 +628,11 @@ namespace TarodevController {
 
         protected virtual void ApplyMovement() {
             if (!_hasControl) return;
+
+            if (Time.time - startHoverTime < stayHoverTime)
+            {
+                _currentExternalVelocity = new Vector2(0, 0);
+            }
 
             _rb.velocity = _speed + _currentExternalVelocity;
             _currentExternalVelocity = Vector2.MoveTowards(_currentExternalVelocity, Vector2.zero, _stats.ExternalVelocityDecay * Time.fixedDeltaTime);

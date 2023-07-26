@@ -33,7 +33,7 @@ public class Floating : MonoBehaviour
             {
                 if (Time.time - enemy.LastGotAttackedTime > 1f)
                 {
-                    Vector2 directionTowardsPlayer = DwarfController.instance.transform.position - transform.position;
+                    Vector2 directionTowardsPlayer = (DwarfController.instance.transform.position + Vector3.up) - transform.position;
                     rb.AddForce(directionTowardsPlayer.normalized * speed, ForceMode2D.Force);
                 }
             }

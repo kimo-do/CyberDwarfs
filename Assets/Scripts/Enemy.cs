@@ -57,6 +57,7 @@ public class Enemy : MonoBehaviour
             Died();
         }
 
+        rb.velocity = Vector2.zero;
         LastGotAttackedTime = Time.time;
     }
 
@@ -66,13 +67,13 @@ public class Enemy : MonoBehaviour
 
         while (hitOverlay.color.a < 1f)
         {
-            hitOverlay.color = new Color(1f, 1f, 1f, hitOverlay.color.a + Time.deltaTime * 10f);
+            hitOverlay.color = new Color(1f, 1f, 1f, hitOverlay.color.a + Time.deltaTime * 20f);
             yield return null;
         }
 
         while (hitOverlay.color.a > 0f)
         {
-            hitOverlay.color = new Color(1f, 1f, 1f, hitOverlay.color.a - Time.deltaTime * 10f);
+            hitOverlay.color = new Color(1f, 1f, 1f, hitOverlay.color.a - Time.deltaTime * 20f);
             yield return null;
         }
     }
