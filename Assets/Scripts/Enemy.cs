@@ -13,15 +13,18 @@ public class Enemy : MonoBehaviour
     public int MaxHealth { get; set; }
 
     public float LastHitTime { get; set; }
+    public float LastGotAttackedTime { get; set; }
 
     private SpriteRenderer sr;
     private Coroutine flashWhiteRoutine;
     private Rigidbody2D rb;
+    private Floating floating;
 
     private void Awake()
     {
         sr = GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
+        floating = GetComponent<Floating>();
 
         Initialize();
     }
@@ -53,6 +56,8 @@ public class Enemy : MonoBehaviour
             CurrentHealth = 0;
             Died();
         }
+
+        LastGotAttackedTime = Time.time;
     }
 
     IEnumerator FlashWhite()

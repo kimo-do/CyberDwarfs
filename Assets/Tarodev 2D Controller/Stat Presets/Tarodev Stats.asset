@@ -24,21 +24,21 @@ MonoBehaviour:
   SnapInput: 1
   VerticalDeadzoneThreshold: 0.3
   HorizontalDeadzoneThreshold: 0.1
-  MaxSpeed: 14
-  Acceleration: 120
+  MaxSpeed: 10
+  Acceleration: 100
   GroundDeceleration: 60
   AirDeceleration: 30
   GroundingForce: -1.5
   StickyFeetMultiplier: 2
   GrounderDistance: 0.05
-  AllowCrouching: 1
+  AllowCrouching: 0
   CrouchSpeedPenalty: 0.5
   CrouchSlowdownFrames: 50
   CrouchBufferCheck: 0.01
   MaxAirJumps: 1
-  JumpPower: 36
-  MaxFallSpeed: 40
-  FallAcceleration: 110
+  JumpPower: 30
+  MaxFallSpeed: 10
+  FallAcceleration: 70
   JumpEndEarlyGravityModifier: 3
   CoyoteFrames: 7
   JumpBufferFrames: 7
@@ -72,7 +72,7 @@ MonoBehaviour:
   DashCooldown: 1.5
   DashEndHorizontalMultiplier: 0.25
   AllowAttacks: 1
-  AttackFrameCooldown: 15
+  AttackFrameCooldown: 20
   ExternalVelocityDecay: 100
   ShowWallDetection: 1
   ShowLedgeDetection: 1

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TarodevController;
 using UnityEngine;
 
 public class DwarfController : MonoBehaviour
@@ -50,8 +51,6 @@ public class DwarfController : MonoBehaviour
         }
     }
 
-
-
     private void Update()
     {
         // Basic attack
@@ -82,7 +81,8 @@ public class DwarfController : MonoBehaviour
                     Vector2 awayFromPlayerDir = enemy.transform.position - hitCircle.position;
 
                     enemy.GetHit(Damage);
-                    enemy.Bounce(awayFromPlayerDir);
+                    PlayerController.instance.startHoverTime = Time.time;
+                    //enemy.Bounce(awayFromPlayerDir);
                 }
             }
         }

@@ -6,6 +6,9 @@ using UnityEngine;
 namespace TarodevController {
     [RequireComponent(typeof(Rigidbody2D), typeof(Collider2D))]
     public class PlayerController : MonoBehaviour, IPlayerController {
+
+        public static PlayerController instance;
+
         [SerializeField] private ScriptableStats _stats;
 
         #region Internal
@@ -22,6 +25,7 @@ namespace TarodevController {
         private Vector2 _currentExternalVelocity;
         private int _fixedFrame;
         private bool _hasControl = true;
+        public float startHoverTime;
 
         #endregion
 
@@ -68,6 +72,7 @@ namespace TarodevController {
         #endregion
 
         protected virtual void Awake() {
+            instance = this;
             _rb = GetComponent<Rigidbody2D>();
             _input = GetComponent<PlayerInput>();
             _cachedTriggerSetting = Physics2D.queriesHitTriggers;
@@ -598,7 +603,11 @@ namespace TarodevController {
             else {
                 var inAirGravity = _stats.FallAcceleration;
                 if (_endedJumpEarly && _speed.y > 0) inAirGravity *= _stats.JumpEndEarlyGravityModifier;
-                _speed.y = Mathf.MoveTowards(_speed.y, -_stats.MaxFallSpeed, inAirGravity * Time.fixedDeltaTime);
+
+                if (Time.time - startHoverTime > 1f)
+                {
+                    _speed.y = Mathf.MoveTowards(_speed.y, -_stats.MaxFallSpeed, inAirGravity * Time.fixedDeltaTime);
+                }
             }
         }
 
