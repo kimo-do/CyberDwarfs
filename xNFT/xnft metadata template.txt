@@ -1,0 +1,55 @@
+{
+  "name": "Alpaca Run",
+  "description": "The Cutest Endless Adventure!",
+  "external_url": "https://almightyalpacas.com",
+  "image": "https://xnfts.s3.us-west-2.amazonaws.com/5Ky3vgzPLYhAFeDcfSgSZBMR1FpJA5PV2PZTUwqxng7j/manifest/0c51ae97e6/assets/app_icon.png",
+  "properties": {},
+  "xnft": {
+    "version": "1.0.1",
+    "manifest": {
+      "entrypoints": {
+        "default": {
+          "web": "https://xnfts.s3.us-west-2.amazonaws.com/5Ky3vgzPLYhAFeDcfSgSZBMR1FpJA5PV2PZTUwqxng7j/manifest/0c51ae97e6/index.html"
+        }
+      },
+      "icon": {
+        "md": "https://xnfts.s3.us-west-2.amazonaws.com/5Ky3vgzPLYhAFeDcfSgSZBMR1FpJA5PV2PZTUwqxng7j/manifest/0c51ae97e6/assets/app_icon.png"
+      },
+      "longDescription": "Alpaca Run - the Cutest Endless Adventure! \n\r\n\rLeap Slide, Collect:\n\r Guide the adorable Alpaca through fences, obstacles, and coins in this endless runner. Jump, slide, and gather coins to customize your Alpaca with cute accessories.\n\r\n\rClimb the Leaderboard, Win Prizes:\n\rCompete worldwide, top the leaderboard, and earn tickets for exciting raffles with amazing rewards. Simple controls, endless fun!\n\r\n\rDownload Now, Unleash the Alpaca!\n\r\n\rBegin your endless runner journey with \"Alpaca Run.\" Jump into captivating landscapes, win raffle prizes, and enjoy addictive gameplay!",
+      "screenshots": [
+        {
+          "uri": "https://xnfts.s3.us-west-2.amazonaws.com/5Ky3vgzPLYhAFeDcfSgSZBMR1FpJA5PV2PZTUwqxng7j/manifest/0c51ae97e6/assets/auth_screen.png",
+          "type": "image/png"
+        },
+        {
+          "uri": "https://xnfts.s3.us-west-2.amazonaws.com/5Ky3vgzPLYhAFeDcfSgSZBMR1FpJA5PV2PZTUwqxng7j/manifest/0c51ae97e6/assets/start_screen.png",
+          "type": "image/png"
+        },
+        {
+          "uri": "https://xnfts.s3.us-west-2.amazonaws.com/5Ky3vgzPLYhAFeDcfSgSZBMR1FpJA5PV2PZTUwqxng7j/manifest/0c51ae97e6/assets/leaderboard_screen.png",
+          "type": "image/png"
+        },
+        {
+          "uri": "https://xnfts.s3.us-west-2.amazonaws.com/5Ky3vgzPLYhAFeDcfSgSZBMR1FpJA5PV2PZTUwqxng7j/manifest/0c51ae97e6/assets/settings_screen.png",
+          "type": "image/png"
+        },
+        {
+          "uri": "https://xnfts.s3.us-west-2.amazonaws.com/5Ky3vgzPLYhAFeDcfSgSZBMR1FpJA5PV2PZTUwqxng7j/manifest/0c51ae97e6/assets/score_screen.png",
+          "type": "image/png"
+        },
+        {
+          "uri": "https://xnfts.s3.us-west-2.amazonaws.com/5Ky3vgzPLYhAFeDcfSgSZBMR1FpJA5PV2PZTUwqxng7j/manifest/0c51ae97e6/assets/highscore_screen.png",
+          "type": "image/png"
+        }
+      ],
+      "storage": "aws"
+    },
+    "contact": "https://discord.gg/f4R25que",
+    "history": [
+      {
+        "version": "1.0.0",
+        "uri": "https://xnfts.s3.us-west-2.amazonaws.com/5Ky3vgzPLYhAFeDcfSgSZBMR1FpJA5PV2PZTUwqxng7j/2808c0fbee.json"
+      }
+    ]
+  }
+}

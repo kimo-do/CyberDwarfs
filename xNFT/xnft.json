@@ -1,21 +1,21 @@
 {
-  "name": "xNFT Quickstart",
+  "name": "Echoes of the Forge",
   "version": "0.0.1",
   "storage": "aws",
-  "description": "Unity Example",
+  "description": "Unravel mysteries. Upgrade relentlessly. Rekindle dwarven legacy.",
   "website": "http://wao.gg",
   "kind": "app",
   "tag": "game",
   "icon": {
     "md": "./assets/icon.jpg"
   },
-  "contact": "kimosabe.crypto@gmail.com",
+  "contact": "https://discord.gg/Vxx3Um6XfA",
   "screenshots": [
     "./assets/screenShot.jpg"
   ],
   "entrypoints": {
     "default": {
-      "web": "https://kimo-do.github.io"
+      "web": "https://kimo-do.github.io/SolanaGameJam/"
     }
   }
 }

@@ -10,6 +10,7 @@ public class DwarfController : MonoBehaviour
     public static DwarfController instance;
     public HitArea hitArea;
     public Transform hitCircle;
+    public Animation anim;
 
     [Header("Settings")]
     public int defaultDamage = 40;
@@ -76,6 +77,8 @@ public class DwarfController : MonoBehaviour
     {
         List<GameObject> hits = hitArea.GetEnemyCollisions();
 
+        anim["Hit"].speed = 3f;
+        anim.Play();
         if (hits.Count > 0)
         {
             foreach (var enemyGO in hits)
