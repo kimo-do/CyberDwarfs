@@ -8,7 +8,7 @@ public class Floating : MonoBehaviour
 
     private Rigidbody2D rb;
     private Enemy enemy;
-
+    
 
     public Rigidbody2D Rb { get => rb; set => rb = value; }
 
@@ -31,10 +31,13 @@ public class Floating : MonoBehaviour
         {
             if (enemy != null)
             {
-                if (Time.time - enemy.LastGotAttackedTime > 1f)
+                if (!enemy.hasDied)
                 {
-                    Vector2 directionTowardsPlayer = (DwarfController.instance.transform.position + Vector3.up) - transform.position;
-                    rb.AddForce(directionTowardsPlayer.normalized * speed, ForceMode2D.Force);
+                    if (Time.time - enemy.LastGotAttackedTime > 1f)
+                    {
+                        Vector2 directionTowardsPlayer = (DwarfController.instance.transform.position + Vector3.up) - transform.position;
+                        rb.AddForce(directionTowardsPlayer.normalized * speed, ForceMode2D.Force);
+                    }
                 }
             }
         }

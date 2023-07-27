@@ -542,6 +542,9 @@ namespace TarodevController {
         #region Horizontal
 
         protected virtual bool HorizontalInputPressed => Mathf.Abs(FrameInput.Move.x) > _stats.HorizontalDeadzoneThreshold;
+
+        public bool Grounded { get => _grounded; set => _grounded = value; }
+
         private bool _stickyFeet;
 
         protected virtual void HandleHorizontal() {
@@ -565,7 +568,7 @@ namespace TarodevController {
 
                 var xInput = FrameInput.Move.x * (ClimbingLadder ? _stats.LadderShimmySpeedMultiplier : 1);
 
-                if (Time.time - startHoverTime < stayHoverTime)
+                if ((Time.time - startHoverTime < stayHoverTime) && !_grounded)
                 {
                     _speed.x = 0;
                 }
@@ -613,7 +616,7 @@ namespace TarodevController {
                 var inAirGravity = _stats.FallAcceleration;
                 if (_endedJumpEarly && _speed.y > 0) inAirGravity *= _stats.JumpEndEarlyGravityModifier;
 
-                if (Time.time - startHoverTime < stayHoverTime)
+                if ((Time.time - startHoverTime < stayHoverTime) && !_grounded)
                 {
                     _speed.y = 0;
                 }
@@ -629,7 +632,7 @@ namespace TarodevController {
         protected virtual void ApplyMovement() {
             if (!_hasControl) return;
 
-            if (Time.time - startHoverTime < stayHoverTime)
+            if ((Time.time - startHoverTime < stayHoverTime) && !_grounded)
             {
                 _currentExternalVelocity = new Vector2(0, 0);
             }

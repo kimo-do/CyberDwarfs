@@ -1,31 +1,40 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using TarodevController;
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
 public class DwarfGameManager : MonoBehaviour
 {
     public static DwarfGameManager instance;
 
     [SerializeField] private Transform spawnPoint;
-    [SerializeField] private RectTransform livesRect;
-    [SerializeField] private GameObject heartTemplate;
-    [SerializeField] private GameObject armourTemplate;
     [SerializeField] private GameObject enemyPfb;
     [SerializeField] private List<Transform> enemySpawns;
+    public Volume globalVolume;
+
 
     [Header("Settings")]
     [SerializeField] private int defaultLives;
 
     public int Lives { get; set; }
-
-    private List<GameObject> spawnedLivesUI = new();
-    private List<GameObject> spawnedArmourUI = new();
+    public bool IsPlayerDeath { get => isPlayerDeath; set => isPlayerDeath = value; }
 
     private float lastEnemySpawn;
+    private bool isPlayerDeath;
+    private ChromaticAberration chrome;
+    private ColorAdjustments colorAdjust;
+    private Coroutine chromeRoutine;
+
 
     private void Awake()
     {
         instance = this;
+
+        globalVolume.profile.TryGet(out chrome);
+        globalVolume.profile.TryGet(out colorAdjust);
     }
 
     // Start is called before the first frame update
@@ -36,48 +45,53 @@ public class DwarfGameManager : MonoBehaviour
 
     private void Initialize()
     {
+        PlayerController.instance.enabled = true;
+        colorAdjust.saturation.value = 0f;
+        isPlayerDeath = false;
         Lives = defaultLives;
 
-        for (int i = 0; i < spawnedLivesUI.Count; i++)
-        {
-            Destroy(spawnedLivesUI[i]);
-        }
-
-        for (int i = 0; i < spawnedArmourUI.Count; i++)
-        {
-            Destroy(spawnedArmourUI[i]);
-        }
-
-        for (int i = 0; i < Lives; i++)
-        {
-            GameObject spawnedLive = Instantiate(heartTemplate, heartTemplate.transform.parent);
-            spawnedLive.SetActive(true);
-            spawnedLivesUI.Add(spawnedLive);
-        }
+        MenuController.instance.InitLives(Lives);
 
         DwarfController.instance.transform.position = spawnPoint.position;
     }
 
     public void LooseLive()
     {
+        if (isPlayerDeath) return;
+
         Lives--;
 
-        if (spawnedLivesUI.Count > 0)
-        {
-            GameObject liveUI = spawnedLivesUI[^1];
-            spawnedLivesUI.Remove(liveUI);
-            Destroy(liveUI);
-        }
+        MenuController.instance.LooseLive();
 
         if (Lives <= 0)
         {
             PlayerDeath();
         }
+        else
+        {
+            if (chromeRoutine != null)
+            {
+                StopCoroutine(chromeRoutine);
+            }
+
+            chromeRoutine = StartCoroutine(ChromeHitEffect(null));
+        }
     }
 
     public void PlayerDeath()
     {
-        Initialize();
+        isPlayerDeath = true;
+        PlayerController.instance.enabled = false;
+
+        if (chromeRoutine != null)
+        {
+            StopCoroutine(chromeRoutine);
+        }
+
+        chromeRoutine = StartCoroutine(ChromeHitEffect(() =>
+        {
+            StartCoroutine(DeathEffect());
+        }));
     }
 
     // Update is called once per frame
@@ -87,9 +101,41 @@ public class DwarfGameManager : MonoBehaviour
         {
             GameObject enemy = Instantiate(enemyPfb);
 
-            Vector2 rdnspawnpos = enemySpawns[Random.Range(0, enemySpawns.Count)].position;
+            Vector2 rdnspawnpos = enemySpawns[UnityEngine.Random.Range(0, enemySpawns.Count)].position;
             enemy.transform.position = rdnspawnpos;
             lastEnemySpawn = Time.time;
         }
     }
+
+
+    IEnumerator ChromeHitEffect(Action DoneHit)
+    {
+        while (chrome.intensity.value < 1f)
+        {
+            chrome.intensity.value = chrome.intensity.value + Time.deltaTime * 20f;
+            yield return null;
+        }
+
+        while (chrome.intensity.value > 0f)
+        {
+            chrome.intensity.value = chrome.intensity.value - Time.deltaTime * 20f;
+            yield return null;
+        }
+
+        DoneHit?.Invoke();
+    }
+
+    IEnumerator DeathEffect()
+    {
+        while (colorAdjust.saturation.value > -100f)
+        {
+            colorAdjust.saturation.value = colorAdjust.saturation.value - Time.deltaTime * 60f;
+            yield return null;
+        }
+
+        yield return new WaitForSeconds(2f);
+
+        Initialize();
+    }
+
 }

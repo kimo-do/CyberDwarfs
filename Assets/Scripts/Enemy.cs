@@ -20,6 +20,8 @@ public class Enemy : MonoBehaviour
     private Rigidbody2D rb;
     private Floating floating;
 
+    public bool hasDied = false;
+
     private void Awake()
     {
         sr = GetComponent<SpriteRenderer>();
@@ -40,7 +42,7 @@ public class Enemy : MonoBehaviour
         rb.AddForce(direction.normalized * 10f, ForceMode2D.Impulse);
     }
 
-    public void GetHit(int damage)
+    public void GetHit(int damage, bool whileGrounded = true)
     {
         CurrentHealth -= damage;
 
@@ -54,10 +56,17 @@ public class Enemy : MonoBehaviour
         if (CurrentHealth <= 0)
         {
             CurrentHealth = 0;
-            Died();
+
+            if (!hasDied)
+            {
+                Died();
+            }
         }
 
-        rb.velocity = Vector2.zero;
+        if (!whileGrounded)
+        {
+            rb.velocity = Vector2.zero;
+        }
         LastGotAttackedTime = Time.time;
     }
 
@@ -80,6 +89,19 @@ public class Enemy : MonoBehaviour
 
     private void Died()
     {
-        Destroy(gameObject);
+        hasDied = true;
+
+        Collider2D col = GetComponent<Collider2D>();
+
+        if (col != null)
+        {
+            col.enabled = false;
+        }
+
+        rb.gravityScale = 1.5f;
+        rb.drag = 0f;
+        sr.color = Color.gray;
+
+        Destroy(gameObject, 6f);
     }
 }

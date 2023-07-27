@@ -5,7 +5,13 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Sample/Solana Wallet/Scenes/wallet_scene.unity
     guid: 8b3834b526b1d9f4687af110b68aeda9
+  - enabled: 1
+    path: Assets/Scenes/StartHub.unity
+    guid: 6f15877bba8af594f8c319ba25a8190a
+  - enabled: 1
+    path: Assets/Scenes/Main.unity
+    guid: ad3240b9143956e42b91196c500e1ba8
   m_configObjects: {}

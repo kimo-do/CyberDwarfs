@@ -2,13 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using TarodevController;
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
 public class DwarfController : MonoBehaviour
 {
     public static DwarfController instance;
     public HitArea hitArea;
     public Transform hitCircle;
-
 
     [Header("Settings")]
     public int defaultDamage = 40;
@@ -41,7 +42,7 @@ public class DwarfController : MonoBehaviour
         {
             if (Time.time - enemy.LastHitTime > 0.5f)
             {
-                if (Time.time - enemy.LastGotAttackedTime < 0.6f)
+                if (Time.time - enemy.LastGotAttackedTime > 0.6f)
                 {
                     enemy.LastHitTime = Time.time;
 
@@ -83,9 +84,13 @@ public class DwarfController : MonoBehaviour
                 {
                     Vector2 awayFromPlayerDir = enemy.transform.position - hitCircle.position;
 
-                    enemy.GetHit(Damage);
+                    enemy.GetHit(Damage, PlayerController.instance.Grounded);
                     PlayerController.instance.startHoverTime = Time.time;
-                    //enemy.Bounce(awayFromPlayerDir);
+
+                    if (PlayerController.instance.Grounded)
+                    {
+                        enemy.Bounce(awayFromPlayerDir);
+                    }
                 }
             }
         }
