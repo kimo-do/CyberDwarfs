@@ -49,8 +49,8 @@ public class DwarfController : MonoBehaviour
                     {
                         enemy.LastHitTime = Time.time;
 
-                        Vector2 awayFromPlayerDir = enemy.transform.position - transform.position;
-                        enemy.Bounce(awayFromPlayerDir);
+                        //Vector2 awayFromPlayerDir = enemy.transform.position - transform.position;
+                        //enemy.Bounce(awayFromPlayerDir);
 
                         DwarfGameManager.instance.LooseLive();
                     }
