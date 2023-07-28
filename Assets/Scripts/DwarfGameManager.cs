@@ -10,6 +10,8 @@ public class DwarfGameManager : MonoBehaviour
 {
     public static DwarfGameManager instance;
 
+    public List<Upgrade> upgradePool;
+
     [SerializeField] private Transform spawnPoint;
     [SerializeField] private GameObject enemyPfb;
     [SerializeField] private List<Transform> enemySpawns;
@@ -21,13 +23,15 @@ public class DwarfGameManager : MonoBehaviour
 
     public int Lives { get; set; }
     public bool IsPlayerDeath { get => isPlayerDeath; set => isPlayerDeath = value; }
+    public List<Upgrade> AppliedUpgrades { get => appliedUpgrades; set => appliedUpgrades = value; }
 
     private float lastEnemySpawn;
     private bool isPlayerDeath;
     private ChromaticAberration chrome;
     private ColorAdjustments colorAdjust;
     private Coroutine chromeRoutine;
-
+    private Coroutine upgradesRoutine;
+    private List<Upgrade> appliedUpgrades = new();
 
     private void Awake()
     {
@@ -45,6 +49,13 @@ public class DwarfGameManager : MonoBehaviour
 
     private void Initialize()
     {
+        if (upgradesRoutine != null)
+        {
+            StopCoroutine(upgradesRoutine);
+        }
+
+        upgradesRoutine = StartCoroutine(RunAllUpgrades());
+
         PlayerController.instance.enabled = true;
         colorAdjust.saturation.value = 0f;
         isPlayerDeath = false;
@@ -78,6 +89,15 @@ public class DwarfGameManager : MonoBehaviour
         }
     }
 
+    public void GainLive()
+    {
+        if (isPlayerDeath) return;
+
+        Lives++;
+
+        MenuController.instance.GainLive();
+    }
+
     public void PlayerDeath()
     {
         isPlayerDeath = true;
@@ -105,6 +125,24 @@ public class DwarfGameManager : MonoBehaviour
             enemy.transform.position = rdnspawnpos;
             lastEnemySpawn = Time.time;
         }
+
+        if (Vector2.Distance(DwarfController.instance.transform.position, Anvil.instance.transform.position) < 2.5f)
+        {
+            Anvil.instance.anvilText.gameObject.SetActive(true);
+
+            if (!isPlayerDeath)
+            {
+                if (Input.GetKeyDown(KeyCode.U))
+                {
+                    MenuController.instance.ClickedAnvil();
+                }
+            }
+        }
+        else
+        {
+            Anvil.instance.anvilText.gameObject.SetActive(false);
+        }
+
     }
 
 
@@ -136,6 +174,65 @@ public class DwarfGameManager : MonoBehaviour
         yield return new WaitForSeconds(2f);
 
         Initialize();
+    }
+
+    public void ApplyUpgrade(Upgrade upgrade)
+    {
+        if (!AppliedUpgrades.Contains(upgrade))
+        {
+            AppliedUpgrades.Add(upgrade);
+        }
+
+        switch (upgrade.ID)
+        {
+                // Extra jump
+            case 1:
+                PlayerController.instance.PlayerStats.MaxAirJumps++;
+                break;
+                // 20% more atk damage
+            case 2:
+                DwarfController.instance.Damage += (int)(DwarfController.instance.Damage * 0.2f);
+                break;
+                // Increase jump height
+            case 3:
+                PlayerController.instance.PlayerStats.JumpPower += (int)(PlayerController.instance.PlayerStats.JumpPower * 0.2f);
+                break;                
+                // Increase running speed
+            case 4:
+                PlayerController.instance.PlayerStats.MaxSpeed += (int)(PlayerController.instance.PlayerStats.MaxSpeed * 0.2f);
+                PlayerController.instance.PlayerStats.Acceleration += (int)(PlayerController.instance.PlayerStats.Acceleration * 0.2f);
+                break;
+            // Reduce falling speed
+            case 5:
+                PlayerController.instance.PlayerStats.MaxFallSpeed -= (int)(PlayerController.instance.PlayerStats.MaxFallSpeed * 0.2f);
+                PlayerController.instance.PlayerStats.FallAcceleration -= (int)(PlayerController.instance.PlayerStats.FallAcceleration * 0.2f);
+                break;
+        }
+    }
+
+    IEnumerator RunAllUpgrades()
+    {
+        float restoreHealth1Time = Time.time;
+
+        while (true)
+        {
+            foreach (var upgrade in AppliedUpgrades)
+            {
+                switch (upgrade.ID)
+                {
+                    // Restore health every 90 sec
+                    case 0:
+                        if (Time.time - restoreHealth1Time >= 90)
+                        {
+                            GainLive();
+                            restoreHealth1Time = Time.time;
+                        }
+                        break;
+                }
+            }
+
+            yield return new WaitForEndOfFrame();
+        }
     }
 
 }

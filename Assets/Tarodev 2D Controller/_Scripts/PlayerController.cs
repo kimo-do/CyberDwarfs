@@ -10,6 +10,7 @@ namespace TarodevController {
         public static PlayerController instance;
 
         [SerializeField] private ScriptableStats _stats;
+        private ScriptableStats runTimeStats;
 
         #region Internal
 
@@ -39,7 +40,7 @@ namespace TarodevController {
         public event Action<bool> Jumped;
         public event Action AirJumped;
         public event Action Attacked;
-        public ScriptableStats PlayerStats => _stats;
+        public ScriptableStats PlayerStats => runTimeStats;
         public Vector2 Input => FrameInput.Move;
         public Vector2 Velocity => _rb.velocity;
         public Vector2 Speed => _speed; // + _currentExternalVelocity; // we should add this, right?
@@ -74,6 +75,7 @@ namespace TarodevController {
 
         protected virtual void Awake() {
             instance = this;
+            runTimeStats = Instantiate(_stats);
             _rb = GetComponent<Rigidbody2D>();
             _input = GetComponent<PlayerInput>();
             _cachedTriggerSetting = Physics2D.queriesHitTriggers;
@@ -89,10 +91,10 @@ namespace TarodevController {
         protected virtual void GatherInput() {
             FrameInput = _input.FrameInput;
 
-            if (_stats.SnapInput)
+            if (runTimeStats.SnapInput)
             {
-                FrameInput.Move.x = Mathf.Abs(FrameInput.Move.x) < _stats.HorizontalDeadzoneThreshold ? 0 : Mathf.Sign(FrameInput.Move.x);
-                FrameInput.Move.y = Mathf.Abs(FrameInput.Move.y) < _stats.VerticalDeadzoneThreshold ? 0 : Mathf.Sign(FrameInput.Move.y);
+                FrameInput.Move.x = Mathf.Abs(FrameInput.Move.x) < runTimeStats.HorizontalDeadzoneThreshold ? 0 : Mathf.Sign(FrameInput.Move.x);
+                FrameInput.Move.y = Mathf.Abs(FrameInput.Move.y) < runTimeStats.VerticalDeadzoneThreshold ? 0 : Mathf.Sign(FrameInput.Move.y);
             }
 
             if (FrameInput.JumpDown) {
@@ -102,8 +104,8 @@ namespace TarodevController {
 
             if (FrameInput.Move.x != 0) _stickyFeet = false;
 
-            if (FrameInput.DashDown && _stats.AllowDash) _dashToConsume = true;
-            if (FrameInput.AttackDown && _stats.AllowAttacks) _attackToConsume = true;
+            if (FrameInput.DashDown && runTimeStats.AllowDash) _dashToConsume = true;
+            if (FrameInput.AttackDown && runTimeStats.AllowAttacks) _attackToConsume = true;
         }
 
         protected virtual void FixedUpdate() {
@@ -144,23 +146,23 @@ namespace TarodevController {
             Physics2D.queriesHitTriggers = false;
 
             // Ground and Ceiling
-            _groundHitCount = Physics2D.CapsuleCastNonAlloc(_col.bounds.center, _col.size, _col.direction, 0, Vector2.down, _groundHits, _stats.GrounderDistance, ~_stats.PlayerLayer);
-            _ceilingHitCount = Physics2D.CapsuleCastNonAlloc(_col.bounds.center, _col.size, _col.direction, 0, Vector2.up, _ceilingHits, _stats.GrounderDistance, ~_stats.PlayerLayer);
+            _groundHitCount = Physics2D.CapsuleCastNonAlloc(_col.bounds.center, _col.size, _col.direction, 0, Vector2.down, _groundHits, runTimeStats.GrounderDistance, ~runTimeStats.PlayerLayer);
+            _ceilingHitCount = Physics2D.CapsuleCastNonAlloc(_col.bounds.center, _col.size, _col.direction, 0, Vector2.up, _ceilingHits, runTimeStats.GrounderDistance, ~runTimeStats.PlayerLayer);
 
             // Walls and Ladders
             var bounds = GetWallDetectionBounds();
-            _wallHitCount = Physics2D.OverlapBoxNonAlloc(bounds.center, bounds.size, 0, _wallHits, _stats.ClimbableLayer);
+            _wallHitCount = Physics2D.OverlapBoxNonAlloc(bounds.center, bounds.size, 0, _wallHits, runTimeStats.ClimbableLayer);
 
-            _hittingWall = Physics2D.CapsuleCast(_col.bounds.center, _col.size, _col.direction, 0, new Vector2(_input.FrameInput.Move.x, 0), _stats.GrounderDistance, ~_stats.PlayerLayer);
+            _hittingWall = Physics2D.CapsuleCast(_col.bounds.center, _col.size, _col.direction, 0, new Vector2(_input.FrameInput.Move.x, 0), runTimeStats.GrounderDistance, ~runTimeStats.PlayerLayer);
 
             Physics2D.queriesHitTriggers = true; // Ladders are set to Trigger
-            _ladderHitCount = Physics2D.OverlapBoxNonAlloc(bounds.center, bounds.size, 0, _ladderHits, _stats.LadderLayer);
+            _ladderHitCount = Physics2D.OverlapBoxNonAlloc(bounds.center, bounds.size, 0, _ladderHits, runTimeStats.LadderLayer);
             Physics2D.queriesHitTriggers = _cachedTriggerSetting;
         }
 
         protected virtual bool TryGetGroundNormal(out Vector2 groundNormal) {
             Physics2D.queriesHitTriggers = false;
-            var hit = Physics2D.Raycast(_rb.position, Vector2.down, _stats.GrounderDistance * 2, ~_stats.PlayerLayer);
+            var hit = Physics2D.Raycast(_rb.position, Vector2.down, runTimeStats.GrounderDistance * 2, ~runTimeStats.PlayerLayer);
             Physics2D.queriesHitTriggers = _cachedTriggerSetting;
             groundNormal = hit.normal; // defaults to Vector2.zero if nothing was hit
             return hit.collider;
@@ -168,7 +170,7 @@ namespace TarodevController {
 
         protected virtual Bounds GetWallDetectionBounds() {
             var colliderOrigin = _rb.position + _standingCollider.offset;
-            return new Bounds(colliderOrigin, _stats.WallDetectorSize);
+            return new Bounds(colliderOrigin, runTimeStats.WallDetectorSize);
         }
 
         protected virtual void HandleCollisions() {
@@ -200,7 +202,7 @@ namespace TarodevController {
 
         protected virtual bool CheckPos(Vector2 pos, CapsuleCollider2D col) {
             Physics2D.queriesHitTriggers = false;
-            var hit = Physics2D.OverlapCapsule(pos + col.offset, col.size - _skinWidth, col.direction, 0, ~_stats.PlayerLayer);
+            var hit = Physics2D.OverlapCapsule(pos + col.offset, col.size - _skinWidth, col.direction, 0, ~runTimeStats.PlayerLayer);
             Physics2D.queriesHitTriggers = _cachedTriggerSetting;
             return !hit;
         }
@@ -217,9 +219,9 @@ namespace TarodevController {
         private bool _isOnWall;
 
         protected virtual void HandleWalls() {
-            if (!_stats.AllowWalls) return;
+            if (!runTimeStats.AllowWalls) return;
 
-            _currentWallJumpMoveMultiplier = Mathf.MoveTowards(_currentWallJumpMoveMultiplier, 1f, 1f / _stats.WallJumpInputLossFrames);
+            _currentWallJumpMoveMultiplier = Mathf.MoveTowards(_currentWallJumpMoveMultiplier, 1f, 1f / runTimeStats.WallJumpInputLossFrames);
 
             // May need to prioritize the nearest wall here... But who is going to make a climbable wall that tight?
             if (_wallHitCount > 0 && _wallHits[0].GetContacts(_wallContacts) > 0) {
@@ -233,7 +235,7 @@ namespace TarodevController {
 
             bool ShouldStickToWall() {
                 if (WallDirection == 0 || _grounded) return false;
-                return !_stats.RequireInputPush || (HorizontalInputPressed && Mathf.Sign(FrameInput.Move.x) == WallDirection);
+                return !runTimeStats.RequireInputPush || (HorizontalInputPressed && Mathf.Sign(FrameInput.Move.x) == WallDirection);
             }
         }
 
@@ -261,10 +263,10 @@ namespace TarodevController {
         private Vector2 _ledgeCornerPos;
         private bool _climbIntoCrawl;
 
-        protected virtual bool LedgeClimbInputDetected => Input.y > _stats.VerticalDeadzoneThreshold || Input.x == WallDirection;
+        protected virtual bool LedgeClimbInputDetected => Input.y > runTimeStats.VerticalDeadzoneThreshold || Input.x == WallDirection;
 
         protected virtual void HandleLedges() {
-            if (!_stats.AllowLedges) return;
+            if (!runTimeStats.AllowLedges) return;
             if (ClimbingLedge || !_isOnWall) return;
 
             GrabbingLedge = TryGetLedgeCorner(out _ledgeCornerPos);
@@ -274,16 +276,16 @@ namespace TarodevController {
 
         protected virtual bool TryGetLedgeCorner(out Vector2 cornerPos) {
             cornerPos = Vector2.zero;
-            var grabHeight = _rb.position + _stats.LedgeGrabPoint.y * Vector2.up;
+            var grabHeight = _rb.position + runTimeStats.LedgeGrabPoint.y * Vector2.up;
 
-            var hit1 = Physics2D.Raycast(grabHeight + _stats.LedgeRaycastSpacing * Vector2.down, WallDirection * Vector2.right, 0.5f, _stats.ClimbableLayer);
+            var hit1 = Physics2D.Raycast(grabHeight + runTimeStats.LedgeRaycastSpacing * Vector2.down, WallDirection * Vector2.right, 0.5f, runTimeStats.ClimbableLayer);
             if (!hit1.collider) return false; // Should hit below the ledge. Mainly used to determine xPos accurately
 
-            var hit2 = Physics2D.Raycast(grabHeight + _stats.LedgeRaycastSpacing * Vector2.up, WallDirection * Vector2.right, 0.5f, _stats.ClimbableLayer);
+            var hit2 = Physics2D.Raycast(grabHeight + runTimeStats.LedgeRaycastSpacing * Vector2.up, WallDirection * Vector2.right, 0.5f, runTimeStats.ClimbableLayer);
             if (hit2.collider)
                 return false; // we only are within ledge-grab range when the first hits and second doesn't
 
-            var hit3 = Physics2D.Raycast(grabHeight + new Vector2(WallDirection * 0.5f, _stats.LedgeRaycastSpacing), Vector2.down, 0.5f, _stats.ClimbableLayer);
+            var hit3 = Physics2D.Raycast(grabHeight + new Vector2(WallDirection * 0.5f, runTimeStats.LedgeRaycastSpacing), Vector2.down, 0.5f, runTimeStats.ClimbableLayer);
             if (!hit3.collider) return false; // gets our yPos of the corner
 
             cornerPos = new(hit1.point.x, hit3.point.y);
@@ -294,18 +296,18 @@ namespace TarodevController {
             // Nudge towards better grabbing position
             if (Input.x == 0 && _hasControl) {
                 var pos = _rb.position;
-                var targetPos = _ledgeCornerPos - Vector2.Scale(_stats.LedgeGrabPoint, new(WallDirection, 1f));
-                _rb.position = Vector2.MoveTowards(pos, targetPos, _stats.LedgeGrabDeceleration * Time.fixedDeltaTime);
+                var targetPos = _ledgeCornerPos - Vector2.Scale(runTimeStats.LedgeGrabPoint, new(WallDirection, 1f));
+                _rb.position = Vector2.MoveTowards(pos, targetPos, runTimeStats.LedgeGrabDeceleration * Time.fixedDeltaTime);
             }
 
             if (LedgeClimbInputDetected) {
-                var finalPos = _ledgeCornerPos + Vector2.Scale(_stats.StandUpOffset, new(WallDirection, 1f));
+                var finalPos = _ledgeCornerPos + Vector2.Scale(runTimeStats.StandUpOffset, new(WallDirection, 1f));
                 
                 if (IsStandingPosClear(finalPos)) {
                     _climbIntoCrawl = false;
                     StartLedgeClimb();
                 }
-                else if (_stats.AllowCrouching && IsCrouchingPosClear(finalPos)) {
+                else if (runTimeStats.AllowCrouching && IsCrouchingPosClear(finalPos)) {
                     _climbIntoCrawl = true;
                     StartLedgeClimb(intoCrawl: true);
                 }
@@ -317,11 +319,11 @@ namespace TarodevController {
             TakeAwayControl();
             ClimbingLedge = true;
             GrabbingLedge = false;
-            _rb.position = _ledgeCornerPos - Vector2.Scale(_stats.LedgeGrabPoint, new(WallDirection, 1f));
+            _rb.position = _ledgeCornerPos - Vector2.Scale(runTimeStats.LedgeGrabPoint, new(WallDirection, 1f));
         }
 
         public virtual void TeleportMidLedgeClimb() {
-            transform.position = _rb.position = _ledgeCornerPos + Vector2.Scale(_stats.StandUpOffset, new(WallDirection, 1f));
+            transform.position = _rb.position = _ledgeCornerPos + Vector2.Scale(runTimeStats.StandUpOffset, new(WallDirection, 1f));
             if (_climbIntoCrawl) TryToggleCrouching(shouldCrouch: true);
             ToggleOnWall(false);
         }
@@ -338,13 +340,13 @@ namespace TarodevController {
         private Vector2 _ladderSnapVel;
         private int _frameLeftLadder;
 
-        protected virtual bool CanEnterLadder => _ladderHitCount > 0 && _fixedFrame > _frameLeftLadder + _stats.LadderCooldownFrames;
-        protected virtual bool ShouldMountLadder => _stats.AutoAttachToLadders || FrameInput.Move.y > _stats.VerticalDeadzoneThreshold || (!_grounded && FrameInput.Move.y < -_stats.VerticalDeadzoneThreshold);
-        protected virtual bool ShouldDismountLadder => !_stats.AutoAttachToLadders && _grounded && FrameInput.Move.y < -_stats.VerticalDeadzoneThreshold;
-        protected virtual bool ShouldCenterOnLadder => _stats.SnapToLadders && FrameInput.Move.x == 0 && _hasControl;
+        protected virtual bool CanEnterLadder => _ladderHitCount > 0 && _fixedFrame > _frameLeftLadder + runTimeStats.LadderCooldownFrames;
+        protected virtual bool ShouldMountLadder => runTimeStats.AutoAttachToLadders || FrameInput.Move.y > runTimeStats.VerticalDeadzoneThreshold || (!_grounded && FrameInput.Move.y < -runTimeStats.VerticalDeadzoneThreshold);
+        protected virtual bool ShouldDismountLadder => !runTimeStats.AutoAttachToLadders && _grounded && FrameInput.Move.y < -runTimeStats.VerticalDeadzoneThreshold;
+        protected virtual bool ShouldCenterOnLadder => runTimeStats.SnapToLadders && FrameInput.Move.x == 0 && _hasControl;
 
         protected virtual void HandleLadders() {
-            if (!_stats.AllowLadders) return;
+            if (!runTimeStats.AllowLadders) return;
 
             if (!ClimbingLadder && CanEnterLadder && ShouldMountLadder) ToggleClimbingLadder(true);
             else if (ClimbingLadder && (_ladderHitCount == 0 || ShouldDismountLadder)) ToggleClimbingLadder(false);
@@ -352,7 +354,7 @@ namespace TarodevController {
             if (ClimbingLadder && ShouldCenterOnLadder) {
                 var pos = _rb.position;
                 var targetX = _ladderHits[0].transform.position.x;
-                _rb.position = Vector2.SmoothDamp(pos, new Vector2(targetX, pos.y), ref _ladderSnapVel, _stats.LadderSnapTime);
+                _rb.position = Vector2.SmoothDamp(pos, new Vector2(targetX, pos.y), ref _ladderSnapVel, runTimeStats.LadderSnapTime);
             }
         }
 
@@ -364,7 +366,7 @@ namespace TarodevController {
             }
             else {
                 if (_ladderHitCount > 0) _frameLeftLadder = _fixedFrame; // to prevent immediately re-mounting ladder
-                if (FrameInput.Move.y > 0) _speed.y += _stats.LadderPopForce; // Pop off ladders
+                if (FrameInput.Move.y > 0) _speed.y += runTimeStats.LadderPopForce; // Pop off ladders
             }
 
             ClimbingLadder = on;
@@ -377,11 +379,11 @@ namespace TarodevController {
 
         private int _frameStartedCrouching;
 
-        protected virtual bool CrouchPressed => FrameInput.Move.y < -_stats.VerticalDeadzoneThreshold;
-        protected virtual bool CanStand => IsStandingPosClear(_rb.position + new Vector2(0, _stats.CrouchBufferCheck));
+        protected virtual bool CrouchPressed => FrameInput.Move.y < -runTimeStats.VerticalDeadzoneThreshold;
+        protected virtual bool CanStand => IsStandingPosClear(_rb.position + new Vector2(0, runTimeStats.CrouchBufferCheck));
 
         protected virtual void HandleCrouching() {
-            if (!_stats.AllowCrouching) return;
+            if (!runTimeStats.AllowCrouching) return;
 
             if (!Crouching && CrouchPressed && _grounded) TryToggleCrouching(true);
             else if (Crouching && (!CrouchPressed || !_grounded)) TryToggleCrouching(false);
@@ -414,9 +416,9 @@ namespace TarodevController {
         private int _frameJumpWasPressed;
         private int _airJumpsRemaining;
 
-        protected virtual bool HasBufferedJump => _bufferedJumpUsable && _fixedFrame < _frameJumpWasPressed + _stats.JumpBufferFrames;
-        protected virtual bool CanUseCoyote => _coyoteUsable && !_grounded && _fixedFrame < _frameLeftGrounded + _stats.CoyoteFrames;
-        protected virtual bool CanWallJump => (_isOnWall && !_isLeavingWall) || (_wallJumpCoyoteUsable && _fixedFrame < _frameLeftWall + _stats.WallJumpCoyoteFrames);
+        protected virtual bool HasBufferedJump => _bufferedJumpUsable && _fixedFrame < _frameJumpWasPressed + runTimeStats.JumpBufferFrames;
+        protected virtual bool CanUseCoyote => _coyoteUsable && !_grounded && _fixedFrame < _frameLeftGrounded + runTimeStats.CoyoteFrames;
+        protected virtual bool CanWallJump => (_isOnWall && !_isLeavingWall) || (_wallJumpCoyoteUsable && _fixedFrame < _frameLeftWall + runTimeStats.WallJumpCoyoteFrames);
         protected virtual bool CanAirJump => !_grounded && _airJumpsRemaining > 0;
 
         protected virtual void HandleJump() {
@@ -439,7 +441,7 @@ namespace TarodevController {
             _bufferedJumpUsable = false;
             _coyoteUsable = false;
             ToggleClimbingLadder(false);
-            _speed.y = _stats.JumpPower;
+            _speed.y = runTimeStats.JumpPower;
             Jumped?.Invoke(false);
         }
 
@@ -449,14 +451,14 @@ namespace TarodevController {
             if (_isOnWall) _isLeavingWall = true; // only toggle if it's a real WallJump, not CoyoteWallJump
             _wallJumpCoyoteUsable = false;
             _currentWallJumpMoveMultiplier = 0;
-            _speed = Vector2.Scale(_stats.WallJumpPower, new(-_lastWallDirection, 1));
+            _speed = Vector2.Scale(runTimeStats.WallJumpPower, new(-_lastWallDirection, 1));
             Jumped?.Invoke(true);
         }
 
         protected virtual void AirJump() {
             _endedJumpEarly = false;
             _airJumpsRemaining--;
-            _speed.y = _stats.JumpPower;
+            _speed.y = runTimeStats.JumpPower;
             _currentExternalVelocity.y = 0; // optional. test it out with a Bouncer if this feels better or worse
             AirJumped?.Invoke();
         }
@@ -468,7 +470,7 @@ namespace TarodevController {
             ResetAirJumps();
         }
 
-        protected virtual void ResetAirJumps() => _airJumpsRemaining = _stats.MaxAirJumps;
+        protected virtual void ResetAirJumps() => _airJumpsRemaining = runTimeStats.MaxAirJumps;
 
         #endregion
 
@@ -489,11 +491,11 @@ namespace TarodevController {
                     return;
                 }
 
-                _dashVel = dir * _stats.DashVelocity;
+                _dashVel = dir * runTimeStats.DashVelocity;
                 _dashing = true;
                 _canDash = false;
                 _startedDashing = _fixedFrame;
-                _nextDashTime = Time.time + _stats.DashCooldown;
+                _nextDashTime = Time.time + runTimeStats.DashCooldown;
                 DashingChanged?.Invoke(true, dir);
 
                 _currentExternalVelocity = Vector2.zero; // Strip external buildup
@@ -502,11 +504,11 @@ namespace TarodevController {
             if (_dashing) {
                 _speed = _dashVel;
                 // Cancel when the time is out or we've reached our max safety distance
-                if (_fixedFrame > _startedDashing + _stats.DashDurationFrames) {
+                if (_fixedFrame > _startedDashing + runTimeStats.DashDurationFrames) {
                     _dashing = false;
                     DashingChanged?.Invoke(false, Vector2.zero);
                     _speed.y = Mathf.Min(0, _speed.y);
-                    _speed.x *= _stats.DashEndHorizontalMultiplier;
+                    _speed.x *= runTimeStats.DashEndHorizontalMultiplier;
                     if (_grounded) ResetDash();
                 }
             }
@@ -529,7 +531,7 @@ namespace TarodevController {
         protected virtual void HandleAttacking() {
             if (!_attackToConsume) return;
             // note: animation looks weird if we allow attacking while crouched. consider different attack animations or not allow it while crouched
-            if (_fixedFrame > _frameLastAttacked + _stats.AttackFrameCooldown) {
+            if (_fixedFrame > _frameLastAttacked + runTimeStats.AttackFrameCooldown) {
                 _frameLastAttacked = _fixedFrame;
                 Attacked?.Invoke();
             }
@@ -541,7 +543,7 @@ namespace TarodevController {
 
         #region Horizontal
 
-        protected virtual bool HorizontalInputPressed => Mathf.Abs(FrameInput.Move.x) > _stats.HorizontalDeadzoneThreshold;
+        protected virtual bool HorizontalInputPressed => Mathf.Abs(FrameInput.Move.x) > runTimeStats.HorizontalDeadzoneThreshold;
 
         public bool Grounded { get => _grounded; set => _grounded = value; }
 
@@ -552,21 +554,21 @@ namespace TarodevController {
 
             // Deceleration
             if (!HorizontalInputPressed) {
-                var deceleration = _grounded ? _stats.GroundDeceleration * (_stickyFeet ? _stats.StickyFeetMultiplier : 1) : _stats.AirDeceleration;
+                var deceleration = _grounded ? runTimeStats.GroundDeceleration * (_stickyFeet ? runTimeStats.StickyFeetMultiplier : 1) : runTimeStats.AirDeceleration;
                 _speed.x = Mathf.MoveTowards(_speed.x, 0, deceleration * Time.fixedDeltaTime);
             }
             // Crawling
             else if (Crouching && _grounded) {
-                var crouchPoint = Mathf.InverseLerp(0, _stats.CrouchSlowdownFrames, _fixedFrame - _frameStartedCrouching);
-                var diminishedMaxSpeed = _stats.MaxSpeed * Mathf.Lerp(1, _stats.CrouchSpeedPenalty, crouchPoint);
-                _speed.x = Mathf.MoveTowards(_speed.x, FrameInput.Move.x * diminishedMaxSpeed, _stats.GroundDeceleration * Time.fixedDeltaTime);
+                var crouchPoint = Mathf.InverseLerp(0, runTimeStats.CrouchSlowdownFrames, _fixedFrame - _frameStartedCrouching);
+                var diminishedMaxSpeed = runTimeStats.MaxSpeed * Mathf.Lerp(1, runTimeStats.CrouchSpeedPenalty, crouchPoint);
+                _speed.x = Mathf.MoveTowards(_speed.x, FrameInput.Move.x * diminishedMaxSpeed, runTimeStats.GroundDeceleration * Time.fixedDeltaTime);
             }
             // Regular Horizontal Movement
             else {
                 // Prevent useless horizontal speed buildup when against a wall
                 if (_hittingWall.collider && Mathf.Abs(_rb.velocity.x) < 0.01f && !_isLeavingWall) _speed.x = 0;
 
-                var xInput = FrameInput.Move.x * (ClimbingLadder ? _stats.LadderShimmySpeedMultiplier : 1);
+                var xInput = FrameInput.Move.x * (ClimbingLadder ? runTimeStats.LadderShimmySpeedMultiplier : 1);
 
                 if ((Time.time - startHoverTime < stayHoverTime) && !_grounded)
                 {
@@ -574,7 +576,7 @@ namespace TarodevController {
                 }
                 else
                 {
-                    _speed.x = Mathf.MoveTowards(_speed.x, xInput * _stats.MaxSpeed, _currentWallJumpMoveMultiplier * _stats.Acceleration * Time.fixedDeltaTime);
+                    _speed.x = Mathf.MoveTowards(_speed.x, xInput * runTimeStats.MaxSpeed, _currentWallJumpMoveMultiplier * runTimeStats.Acceleration * Time.fixedDeltaTime);
                 }
             }
         }
@@ -589,32 +591,32 @@ namespace TarodevController {
             // Ladder
             if (ClimbingLadder) {
                 var yInput = FrameInput.Move.y;
-                _speed.y = yInput * (yInput > 0 ? _stats.LadderClimbSpeed : _stats.LadderSlideSpeed);
+                _speed.y = yInput * (yInput > 0 ? runTimeStats.LadderClimbSpeed : runTimeStats.LadderSlideSpeed);
             }
             // Grounded & Slopes
             else if (_grounded && _speed.y <= 0f) {
-                _speed.y = _stats.GroundingForce;
+                _speed.y = runTimeStats.GroundingForce;
 
                 if (TryGetGroundNormal(out var groundNormal)) {
                     GroundNormal = groundNormal;
                     if (!Mathf.Approximately(GroundNormal.y, 1f)) {
                         // on a slope
                         _speed.y = _speed.x * -GroundNormal.x / GroundNormal.y;
-                        if (_speed.x != 0) _speed.y += _stats.GroundingForce;
+                        if (_speed.x != 0) _speed.y += runTimeStats.GroundingForce;
                     }
                 }
             }
             // Wall Climbing & Sliding
             else if (_isOnWall && !_isLeavingWall) {
-                if (FrameInput.Move.y > 0) _speed.y = _stats.WallClimbSpeed;
-                else if (FrameInput.Move.y < 0) _speed.y = -_stats.MaxWallFallSpeed;
-                else if (GrabbingLedge) _speed.y = Mathf.MoveTowards(_speed.y, 0, _stats.LedgeGrabDeceleration * Time.fixedDeltaTime);
-                else _speed.y = Mathf.MoveTowards(Mathf.Min(_speed.y, 0), -_stats.MaxWallFallSpeed, _stats.WallFallAcceleration * Time.fixedDeltaTime);
+                if (FrameInput.Move.y > 0) _speed.y = runTimeStats.WallClimbSpeed;
+                else if (FrameInput.Move.y < 0) _speed.y = -runTimeStats.MaxWallFallSpeed;
+                else if (GrabbingLedge) _speed.y = Mathf.MoveTowards(_speed.y, 0, runTimeStats.LedgeGrabDeceleration * Time.fixedDeltaTime);
+                else _speed.y = Mathf.MoveTowards(Mathf.Min(_speed.y, 0), -runTimeStats.MaxWallFallSpeed, runTimeStats.WallFallAcceleration * Time.fixedDeltaTime);
             }
             // In Air
             else {
-                var inAirGravity = _stats.FallAcceleration;
-                if (_endedJumpEarly && _speed.y > 0) inAirGravity *= _stats.JumpEndEarlyGravityModifier;
+                var inAirGravity = runTimeStats.FallAcceleration;
+                if (_endedJumpEarly && _speed.y > 0) inAirGravity *= runTimeStats.JumpEndEarlyGravityModifier;
 
                 if ((Time.time - startHoverTime < stayHoverTime) && !_grounded)
                 {
@@ -622,7 +624,7 @@ namespace TarodevController {
                 }
                 else
                 {
-                    _speed.y = Mathf.MoveTowards(_speed.y, -_stats.MaxFallSpeed, inAirGravity * Time.fixedDeltaTime);
+                    _speed.y = Mathf.MoveTowards(_speed.y, -runTimeStats.MaxFallSpeed, inAirGravity * Time.fixedDeltaTime);
                 }
             }
         }
@@ -638,33 +640,33 @@ namespace TarodevController {
             }
 
             _rb.velocity = _speed + _currentExternalVelocity;
-            _currentExternalVelocity = Vector2.MoveTowards(_currentExternalVelocity, Vector2.zero, _stats.ExternalVelocityDecay * Time.fixedDeltaTime);
+            _currentExternalVelocity = Vector2.MoveTowards(_currentExternalVelocity, Vector2.zero, runTimeStats.ExternalVelocityDecay * Time.fixedDeltaTime);
         }
 
 #if UNITY_EDITOR
         private void OnDrawGizmos() {
-            if (_stats == null) return;
+            if (runTimeStats == null) return;
 
-            if (_stats.ShowWallDetection && _standingCollider != null) {
+            if (runTimeStats.ShowWallDetection && _standingCollider != null) {
                 Gizmos.color = Color.white;
                 var bounds = GetWallDetectionBounds();
                 Gizmos.DrawWireCube(bounds.center, bounds.size);
             }
 
-            if (_stats.AllowLedges && _stats.ShowLedgeDetection) {
+            if (runTimeStats.AllowLedges && runTimeStats.ShowLedgeDetection) {
                 Gizmos.color = Color.red;
                 var facingDir = Mathf.Sign(WallDirection);
-                var grabHeight = transform.position + _stats.LedgeGrabPoint.y * Vector3.up;
-                var grabPoint = grabHeight + facingDir * _stats.LedgeGrabPoint.x * Vector3.right;
+                var grabHeight = transform.position + runTimeStats.LedgeGrabPoint.y * Vector3.up;
+                var grabPoint = grabHeight + facingDir * runTimeStats.LedgeGrabPoint.x * Vector3.right;
                 Gizmos.DrawWireSphere(grabPoint, 0.05f);
-                Gizmos.DrawWireSphere(grabPoint + Vector3.Scale(_stats.StandUpOffset, new(facingDir, 1)), 0.05f);
-                Gizmos.DrawRay(grabHeight + _stats.LedgeRaycastSpacing * Vector3.down, 0.5f * facingDir * Vector3.right);
-                Gizmos.DrawRay(grabHeight + _stats.LedgeRaycastSpacing * Vector3.up, 0.5f * facingDir * Vector3.right);
+                Gizmos.DrawWireSphere(grabPoint + Vector3.Scale(runTimeStats.StandUpOffset, new(facingDir, 1)), 0.05f);
+                Gizmos.DrawRay(grabHeight + runTimeStats.LedgeRaycastSpacing * Vector3.down, 0.5f * facingDir * Vector3.right);
+                Gizmos.DrawRay(grabHeight + runTimeStats.LedgeRaycastSpacing * Vector3.up, 0.5f * facingDir * Vector3.right);
             }
         }
 
         private void OnValidate() {
-            if (_stats == null) Debug.LogWarning("Please assign a ScriptableStats asset to the Player Controller's Stats slot", this);
+            if (runTimeStats == null) Debug.LogWarning("Please assign a ScriptableStats asset to the Player Controller's Stats slot", this);
             if (_standingCollider == null) Debug.LogWarning("Please assign a Capsule Collider to the Standing Collider slot", this);
             if (_crouchingCollider == null) Debug.LogWarning("Please assign a Capsule Collider to the Crouching Collider slot", this);
             if (_rb == null && !TryGetComponent(out _rb)) Debug.LogWarning("Ensure the GameObject with the Player Controller has a Rigidbody2D", this);
