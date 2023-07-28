@@ -266,7 +266,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 30, y: -244}
+  m_AnchoredPosition: {x: 30, y: -319}
   m_SizeDelta: {x: -244.02258, y: 306.6531}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &125134368
@@ -9521,7 +9521,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '  olana'
+  m_text: solana
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 094d641c2e4727343afc230d5f132768, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 094d641c2e4727343afc230d5f132768, type: 2}
@@ -9768,7 +9768,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: -56}
   m_SizeDelta: {x: 311.9397, y: 73.2475}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1104381917
@@ -10586,24 +10586,12 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1946564979349063685, guid: da7ed1333e8b3a1469fda67074fb2ea4, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.77019
-      objectReference: {fileID: 0}
-    - target: {fileID: 1946564979349063685, guid: da7ed1333e8b3a1469fda67074fb2ea4, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0.77019
-      objectReference: {fileID: 0}
-    - target: {fileID: 1946564979349063685, guid: da7ed1333e8b3a1469fda67074fb2ea4, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 0.77019
-      objectReference: {fileID: 0}
-    - target: {fileID: 1946564979349063685, guid: da7ed1333e8b3a1469fda67074fb2ea4, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -4.28
+      value: -2.52
       objectReference: {fileID: 0}
     - target: {fileID: 1946564979349063685, guid: da7ed1333e8b3a1469fda67074fb2ea4, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.55
+      value: 3.166
       objectReference: {fileID: 0}
     - target: {fileID: 1946564979349063685, guid: da7ed1333e8b3a1469fda67074fb2ea4, type: 3}
       propertyPath: m_LocalPosition.z
@@ -11022,9 +11010,9 @@ RectTransform:
   - {fileID: 1308230901}
   m_Father: {fileID: 743265281}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -467.01996}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 0}
+  m_AnchoredPosition: {x: 0, y: 72.98004}
   m_SizeDelta: {x: 266.1184, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1655166523
@@ -11566,12 +11554,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 1
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
