@@ -175,8 +175,15 @@ namespace TarodevController {
         [Tooltip("Allows the player to attack")]
         public bool AllowAttacks = true;
 
+        [Tooltip("Allows the player to shoot")]
+        public bool AllowShoots = true;
+
         [Tooltip("The fixed frame cooldown of your players basic attack")]
         public int AttackFrameCooldown = 15;
+
+
+        [Tooltip("The fixed frame cooldown of your players basic shoot")]
+        public int ShootFrameCooldown = 15;
 
         [Header("EXTERNAL")] 
         [Tooltip("The rate at which external velocity decays. Should be close to Fall Acceleration")]

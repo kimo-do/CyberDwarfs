@@ -10,20 +10,29 @@ public class DwarfController : MonoBehaviour
     public static DwarfController instance;
     public HitArea hitArea;
     public Transform hitCircle;
+    public Transform gun;
+    public Transform gunNossle;
     public Animation anim;
 
     [Header("Settings")]
     public int defaultDamage = 40;
+    public int defaultBulletDamage = 30;
+
     public float defaultAttackTime = 0.6f;
 
     public int Damage { get; set; }
+    public int ShootDamage { get; set; }
     public float AttackTime { get; set; }
+    public Rigidbody2D Rb { get => rb; set => rb = value; }
 
     private float lastAttackTime;
+
+    private Rigidbody2D rb;
 
     private void Awake()
     {
         instance = this;
+        rb = GetComponent<Rigidbody2D>();
     }
 
     private void Start()
@@ -34,6 +43,7 @@ public class DwarfController : MonoBehaviour
     private void Initialize()
     {
         Damage = defaultDamage;
+        ShootDamage = defaultBulletDamage;
         AttackTime = defaultAttackTime;
     }
 
@@ -49,18 +59,14 @@ public class DwarfController : MonoBehaviour
                     {
                         enemy.LastHitTime = Time.time;
 
-                        //Vector2 awayFromPlayerDir = enemy.transform.position - transform.position;
+                        Vector2 awayFromPlayerDir = enemy.transform.position - transform.position;
+                        PlayerController.instance.ApplyVelocity(awayFromPlayerDir, PlayerForce.Burst);
                         //enemy.Bounce(awayFromPlayerDir);
 
                         DwarfGameManager.instance.LooseLive();
                     }
                 }
             }
-        }
-        if (collision.gameObject.TryGetComponent(out Bullet bullet))
-        {
-            Destroy(bullet.gameObject);
-            DwarfGameManager.instance.LooseLive();
         }
     }
 
@@ -76,9 +82,41 @@ public class DwarfController : MonoBehaviour
             }
         }
 
+        // Shoot attack
+        if (Input.GetMouseButtonDown(1))
+        {
+            if (Time.time - lastAttackTime >= AttackTime)
+            {
+                DoShoot();
+                lastAttackTime = Time.time;
+            }
+        }
+
         Vector2 mousePosWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector2 lookAtMouse = mousePosWorld - (Vector2)hitCircle.position;
         hitCircle.right = lookAtMouse;
+        gun.right = lookAtMouse;
+    }
+
+    private Coroutine hideGunRoutine;
+
+    private void DoShoot()
+    {
+        DwarfGameManager.instance.SpawnBullet(gunNossle.position, gun.right, ShootDamage, true);
+        gun.gameObject.SetActive(true);
+
+        if (hideGunRoutine != null)
+        {
+            StopCoroutine(hideGunRoutine);
+        }
+
+        hideGunRoutine = StartCoroutine(HideGun());
+    }
+
+    IEnumerator HideGun()
+    {
+        yield return new WaitForSeconds(0.3f);
+        gun.gameObject.SetActive(false);
     }
 
     private void DoAttack()

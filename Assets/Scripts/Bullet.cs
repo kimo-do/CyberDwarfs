@@ -4,15 +4,20 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public int Damage { get; set; }
+
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        
+        if (collision.gameObject.TryGetComponent(out Enemy enemy))
+        {
+            enemy.GetHit(Damage);
+        }
+        if (collision.gameObject.TryGetComponent(out DwarfController dwarf))
+        {
+            DwarfGameManager.instance.LooseLive();
+        }
+
+        Destroy(gameObject);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

@@ -75,7 +75,7 @@ public class MenuController : MonoBehaviour
         }));
     }
 
-    private void LoadFirstScene()
+    public void LoadFirstScene()
     {
         introScreen.gameObject.SetActive(false);
         StartCoroutine(LoadFirstSceneAsync());
@@ -83,7 +83,7 @@ public class MenuController : MonoBehaviour
 
     IEnumerator LoadFirstSceneAsync()
     {
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("Main");
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("Main v2");
 
         // Wait until the asynchronous scene fully loads
         while (!asyncLoad.isDone)

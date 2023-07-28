@@ -7,6 +7,7 @@ namespace TarodevController {
         private Animator _anim;
         private SpriteRenderer _renderer;
         private AudioSource _source;
+        private bool isDeath;
 
         private void Awake() {
             _player = GetComponentInParent<IPlayerController>();
@@ -23,9 +24,21 @@ namespace TarodevController {
             _player.Jumped += OnJumped;
             _player.AirJumped += OnAirJumped;
             _player.Attacked += OnAttacked;
+            _player.Shoot += OnShoot;
+            _player.Death += OnDeath;
+        }
+
+        private void OnShoot() => _shot = true;
+
+        private void OnDeath()
+        {
+            isDeath = true;
+            _anim.Play(Death, 0);
         }
 
         private void Update() {
+            if (isDeath) return;
+
             HandleSpriteFlipping();
             HandleGroundEffects();
             HandleWallSlideEffects();
@@ -36,7 +49,14 @@ namespace TarodevController {
         private void HandleSpriteFlipping() {
             if (_player.ClimbingLedge) return;
             if (_isOnWall &_player.WallDirection != 0) _renderer.flipX = _player.WallDirection == -1;
-            else if (Mathf.Abs(_player.Input.x) > 0.1f) _renderer.flipX = _player.Input.x < 0;
+            else
+            {
+                Vector2 mousePosWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                Vector2 localMousePos = transform.InverseTransformPoint(mousePosWorld);
+
+                _renderer.flipX = localMousePos.x < 0;
+            }
+            //else if (Mathf.Abs(_player.Input.x) > 0.1f) _renderer.flipX = _player.Input.x < 0;
         }
 
         #region Ground Movement
@@ -193,6 +213,7 @@ namespace TarodevController {
         private bool _landed;
         private bool _grounded;
         private bool _wallJumped;
+        private bool _deathTriggered;
 
         private void OnJumped(bool wallJumped) {
             if (_player.ClimbingLedge) return;
@@ -240,6 +261,9 @@ namespace TarodevController {
         [SerializeField] private AudioClip _attackClip;
         private bool _attacked;
 
+        [SerializeField] private float _shootAnimTime = 0.25f;
+        private bool _shot;
+
         private void OnAttacked() => _attacked = true;
 
         // Called from AnimationEvent
@@ -260,10 +284,12 @@ namespace TarodevController {
             _currentState = state;
 
             int GetState() {
+                if (_deathTriggered) return Death;
                 if (Time.time < _lockedTill) return _currentState;
 
                 if (_isLedgeClimbing) return LockState(_climbIntoCrawl ? LedgeClimbIntoCrawl : LedgeClimb, _player.PlayerStats.LedgeClimbDuration);
                 if (_attacked) return LockState(Attack, _attackAnimTime);
+                if (_shot) return LockState(Shoot, _shootAnimTime);
                 if (_player.ClimbingLadder) return _player.Speed.y == 0 || _grounded ? ClimbIdle : Climb;
 
                 if (!_grounded) {
@@ -298,6 +324,8 @@ namespace TarodevController {
                 _hitWall = false;
                 _dismountedWall = false;
                 _isLedgeClimbing = false;
+                _deathTriggered = false;
+                _shot = false;
             }
         }
 
@@ -331,6 +359,10 @@ namespace TarodevController {
         private static readonly int LedgeClimbIntoCrawl = Animator.StringToHash("LedgeClimbIntoCrawl");
 
         private static readonly int Attack = Animator.StringToHash("Attack");
+        private static readonly int Shoot = Animator.StringToHash("Shoot");
+
+
+        private static readonly int Death = Animator.StringToHash("Death");
         #endregion
 
         #endregion

@@ -40,6 +40,9 @@ namespace TarodevController {
         public event Action<bool> Jumped;
         public event Action AirJumped;
         public event Action Attacked;
+        public event Action Shoot;
+        public event Action Death;
+
         public ScriptableStats PlayerStats => runTimeStats;
         public Vector2 Input => FrameInput.Move;
         public Vector2 Velocity => _rb.velocity;
@@ -50,6 +53,7 @@ namespace TarodevController {
         public bool ClimbingLadder { get; private set; }
         public bool GrabbingLedge { get; private set; }
         public bool ClimbingLedge { get; private set; }
+        public bool IsDeath { get; private set; }
 
         public virtual void ApplyVelocity(Vector2 vel, PlayerForce forceType) {
             if (forceType == PlayerForce.Burst) _speed += vel;
@@ -64,6 +68,14 @@ namespace TarodevController {
         public virtual void TakeAwayControl(bool resetVelocity = true) {
             if (resetVelocity) _rb.velocity = Vector2.zero;
             _hasControl = false;
+        }
+
+        public virtual void Die()
+        {
+            IsDeath = true;
+            _speed = Vector2.zero;
+            _currentExternalVelocity = Vector2.zero;
+            Death?.Invoke();
         }
 
         public virtual void ReturnControl() {
@@ -89,6 +101,8 @@ namespace TarodevController {
         }
 
         protected virtual void GatherInput() {
+            if (IsDeath) return;
+
             FrameInput = _input.FrameInput;
 
             if (runTimeStats.SnapInput)
@@ -106,10 +120,14 @@ namespace TarodevController {
 
             if (FrameInput.DashDown && runTimeStats.AllowDash) _dashToConsume = true;
             if (FrameInput.AttackDown && runTimeStats.AllowAttacks) _attackToConsume = true;
+            if (FrameInput.ShootDown && runTimeStats.AllowShoots) _shootToConsume = true;
+
         }
 
         protected virtual void FixedUpdate() {
             _fixedFrame++;
+
+            if (IsDeath) return;
 
             CheckCollisions();
             HandleCollisions();
@@ -121,6 +139,7 @@ namespace TarodevController {
             HandleJump();
             HandleDash();
             HandleAttacking();
+            HandleShooting();
 
             HandleHorizontal();
             HandleVertical();
@@ -525,7 +544,10 @@ namespace TarodevController {
         #region Attacking
 
         private bool _attackToConsume;
+        private bool _shootToConsume;
         private int _frameLastAttacked = int.MinValue;
+        private int _frameLastShoot = int.MinValue;
+
 
 
         protected virtual void HandleAttacking() {
@@ -537,6 +559,19 @@ namespace TarodevController {
             }
 
             _attackToConsume = false;
+        }
+
+        protected virtual void HandleShooting()
+        {
+            if (!_shootToConsume) return;
+            // note: animation looks weird if we allow attacking while crouched. consider different attack animations or not allow it while crouched
+            if (_fixedFrame > _frameLastShoot + runTimeStats.ShootFrameCooldown)
+            {
+                _frameLastShoot = _fixedFrame;
+                Shoot?.Invoke();
+            }
+
+            _shootToConsume = false;
         }
 
         #endregion
@@ -686,6 +721,8 @@ namespace TarodevController {
         public event Action<bool> Jumped; // Is wall jump
         public event Action AirJumped;
         public event Action Attacked;
+        public event Action Shoot;
+        public event Action Death;
 
         public ScriptableStats PlayerStats { get; }
         public Vector2 Input { get; }

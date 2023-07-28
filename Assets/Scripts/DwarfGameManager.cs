@@ -15,6 +15,7 @@ public class DwarfGameManager : MonoBehaviour
     [SerializeField] private Transform spawnPoint;
     [SerializeField] private GameObject enemyPfb;
     [SerializeField] private GameObject bulletPfb;
+    [SerializeField] private GameObject allyBulletPfb;
     [SerializeField] private List<Transform> enemySpawns;
     public Volume globalVolume;
 
@@ -48,11 +49,21 @@ public class DwarfGameManager : MonoBehaviour
         Initialize();
     }    
 
-    public void SpawnBullet(Vector2 from, Vector2 direction)
+    public void SpawnBullet(Vector2 from, Vector2 direction, int damage, bool ally = false)
     {
-        GameObject newBullet = Instantiate(bulletPfb, from, Quaternion.identity);
+        GameObject newBullet = Instantiate(ally ? allyBulletPfb : bulletPfb, from, Quaternion.identity);
+        newBullet.GetComponent<Bullet>().Damage = damage;
         newBullet.transform.right = direction;
         newBullet.GetComponent<Rigidbody2D>().AddForce(newBullet.transform.right * 5f, ForceMode2D.Impulse);
+
+        if (ally)
+        {
+            newBullet.layer = LayerMask.NameToLayer("Bullet");
+        }
+        else
+        {
+            newBullet.layer = LayerMask.NameToLayer("EnemyBullet");
+        }
     }
 
     private void Initialize()
@@ -65,6 +76,7 @@ public class DwarfGameManager : MonoBehaviour
         upgradesRoutine = StartCoroutine(RunAllUpgrades());
 
         PlayerController.instance.enabled = true;
+        DwarfController.instance.Rb.isKinematic = false;
         colorAdjust.saturation.value = 0f;
         isPlayerDeath = false;
         Lives = defaultLives;
@@ -109,7 +121,10 @@ public class DwarfGameManager : MonoBehaviour
     public void PlayerDeath()
     {
         isPlayerDeath = true;
-        PlayerController.instance.enabled = false;
+        DwarfController.instance.Rb.isKinematic = true;
+        DwarfController.instance.Rb.velocity = Vector2.zero;
+        DwarfController.instance.enabled = false;
+        PlayerController.instance.Die();
 
         if (chromeRoutine != null)
         {
@@ -181,7 +196,8 @@ public class DwarfGameManager : MonoBehaviour
 
         yield return new WaitForSeconds(2f);
 
-        Initialize();
+        //Initialize();
+        MenuController.instance.LoadFirstScene();
     }
 
     public void ApplyUpgrade(Upgrade upgrade)

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TarodevController;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
@@ -166,17 +167,20 @@ public class Enemy : MonoBehaviour
     {
         if (Time.time - LastAttackTime > attackInterval)
         {
-            IsAttacking = true;
-            if (attackingRoutine != null)
+            if (!DwarfGameManager.instance.IsPlayerDeath)
             {
-                StopCoroutine(attackingRoutine);
-            }
+                IsAttacking = true;
+                if (attackingRoutine != null)
+                {
+                    StopCoroutine(attackingRoutine);
+                }
 
-            switch (enemyType)
-            {
-                case EnemyType.Orb:
-                    attackingRoutine = StartCoroutine(OrbAttack());
-                    break;
+                switch (enemyType)
+                {
+                    case EnemyType.Orb:
+                        attackingRoutine = StartCoroutine(OrbAttack());
+                        break;
+                }
             }
         }
     }
@@ -191,7 +195,7 @@ public class Enemy : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
 
         Vector2 directionToPlayer = DwarfController.instance.hitCircle.transform.position - transform.position;
-        DwarfGameManager.instance.SpawnBullet(shootPoint.transform.position, directionToPlayer);
+        DwarfGameManager.instance.SpawnBullet(shootPoint.transform.position, directionToPlayer, 1);
 
         LastAttackTime = Time.time; 
         IsAttacking = false;

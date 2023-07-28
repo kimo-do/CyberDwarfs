@@ -45,6 +45,7 @@ namespace TarodevController {
                 JumpHeld = Input.GetButton("Jump") || Input.GetKey(KeyCode.C),
                 DashDown = Input.GetKeyDown(KeyCode.X),
                 AttackDown = Input.GetMouseButtonDown(0),
+                ShootDown = Input.GetMouseButtonDown(1),
                 Move = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")),
                 ExampleActionHeld = Input.GetKey(KeyCode.E),
             };
@@ -58,6 +59,7 @@ namespace TarodevController {
         public bool JumpHeld;
         public bool DashDown;
         public bool AttackDown;
+        public bool ShootDown;
         public bool ExampleActionHeld;
     }
 }
