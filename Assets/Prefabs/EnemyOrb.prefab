@@ -147,7 +147,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 1.4617707, y: 4.648911, z: 0}
-  m_LocalScale: {x: 2.2586055, y: 2.2586055, z: 2.2586055}
+  m_LocalScale: {x: 3.6, y: 3.6, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8166834039213982935}
@@ -297,6 +297,7 @@ MonoBehaviour:
   shootPoint: {fileID: 5838630046084440512}
   defaultHealth: 100
   enemyType: 1
+  attackInterval: 2
   hasDied: 0
 --- !u!95 &2410893082684312631
 Animator:
