@@ -39,21 +39,24 @@ public class DwarfController : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        //if (collision.gameObject.TryGetComponent(out Enemy enemy))
-        //{
-        //    if (Time.time - enemy.LastHitTime > 0.5f)
-        //    {
-        //        if (Time.time - enemy.LastGotAttackedTime > 0.6f)
-        //        {
-        //            enemy.LastHitTime = Time.time;
+        if (collision.gameObject.TryGetComponent(out Enemy enemy))
+        {
+            if (enemy.enemyType == Enemy.EnemyType.Slime)
+            {
+                if (Time.time - enemy.LastHitTime > 0.5f)
+                {
+                    if (Time.time - enemy.LastGotAttackedTime > 0.6f)
+                    {
+                        enemy.LastHitTime = Time.time;
 
-        //            Vector2 awayFromPlayerDir = enemy.transform.position - transform.position;
-        //            enemy.Bounce(awayFromPlayerDir);
+                        Vector2 awayFromPlayerDir = enemy.transform.position - transform.position;
+                        enemy.Bounce(awayFromPlayerDir);
 
-        //            DwarfGameManager.instance.LooseLive();
-        //        }
-        //    }
-        //}
+                        DwarfGameManager.instance.LooseLive();
+                    }
+                }
+            }
+        }
         if (collision.gameObject.TryGetComponent(out Bullet bullet))
         {
             Destroy(bullet.gameObject);
