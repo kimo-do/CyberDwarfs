@@ -148,9 +148,13 @@ public class Enemy : MonoBehaviour
         }
 
         rb.isKinematic = true;
+
+        if (enemyType != EnemyType.Orb)
+        {
+            rb.velocity = Vector2.zero;
+        }
+
         rb.drag = 0f;
-
-
     }
 
     public void DeathFinished()
