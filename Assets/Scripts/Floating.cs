@@ -35,8 +35,23 @@ public class Floating : MonoBehaviour
                 {
                     if (Time.time - enemy.LastGotAttackedTime > 1f)
                     {
-                        Vector2 directionTowardsPlayer = (DwarfController.instance.transform.position + Vector3.up) - transform.position;
-                        rb.AddForce(directionTowardsPlayer.normalized * speed, ForceMode2D.Force);
+                        float distanceToPlayer = Vector2.Distance(DwarfController.instance.transform.position, transform.position);
+
+                        if (distanceToPlayer < 5f)
+                        {
+                            rb.drag = 10f;
+
+                            if (!enemy.IsAttacking)
+                            {
+                                enemy.Attack();
+                            }
+                        }
+                        else if (!enemy.IsAttacking) 
+                        {
+                            rb.drag = 1f;
+                            Vector2 directionTowardsPlayer = (DwarfController.instance.transform.position + Vector3.up) - transform.position;
+                            rb.AddForce(directionTowardsPlayer.normalized * speed, ForceMode2D.Force);
+                        }
                     }
                 }
             }

@@ -14,6 +14,7 @@ public class DwarfGameManager : MonoBehaviour
 
     [SerializeField] private Transform spawnPoint;
     [SerializeField] private GameObject enemyPfb;
+    [SerializeField] private GameObject bulletPfb;
     [SerializeField] private List<Transform> enemySpawns;
     public Volume globalVolume;
 
@@ -46,6 +47,13 @@ public class DwarfGameManager : MonoBehaviour
     {
         Initialize();
     }    
+
+    public void SpawnBullet(Vector2 from, Vector2 direction)
+    {
+        GameObject newBullet = Instantiate(bulletPfb, from, Quaternion.identity);
+        newBullet.transform.right = direction;
+        newBullet.GetComponent<Rigidbody2D>().AddForce(newBullet.transform.right * 5f, ForceMode2D.Impulse);
+    }
 
     private void Initialize()
     {

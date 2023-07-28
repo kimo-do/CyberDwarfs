@@ -5,9 +5,14 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     [SerializeField] private SpriteRenderer hitOverlay;
+    [SerializeField] private Transform shootPoint;
+
 
     [Header("Settings")]
     [SerializeField] private int defaultHealth = 100;
+
+    public EnemyType enemyType;
+    public float attackInterval = 2f;
 
     public int CurrentHealth { get; set; }
     public int MaxHealth { get; set; }
@@ -15,20 +20,59 @@ public class Enemy : MonoBehaviour
     public float LastHitTime { get; set; }
     public float LastGotAttackedTime { get; set; }
 
+    public float LastAttackTime { get; set; }
+
+    public bool IsAttacking { get; set; }
+
     private SpriteRenderer sr;
     private Coroutine flashWhiteRoutine;
+    private Coroutine attackingRoutine;
     private Rigidbody2D rb;
     private Floating floating;
+    private Animator anim;
 
     public bool hasDied = false;
+
+
+    public enum EnemyType
+    {
+        None,
+        Orb,
+        Goblin,
+        Slime
+    }
 
     private void Awake()
     {
         sr = GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
         floating = GetComponent<Floating>();
+        anim = GetComponent<Animator>();
 
         Initialize();
+    }
+
+    private void Update()
+    {
+        //if (rb.velocity.x > 0)
+        //{
+        //    sr.flipX = true;
+        //}
+        //else if (rb.velocity.x < 0)
+        //{
+        //    sr.flipX = false;
+        //}
+
+        Vector2 relPlayerPos = DwarfController.instance.transform.InverseTransformPoint(transform.position);
+
+        if (relPlayerPos.x > 0)
+        {
+            sr.flipX = false;
+        }
+        else if (relPlayerPos.x < 0)
+        {
+            sr.flipX = true;
+        }
     }
 
     void Initialize()
@@ -89,6 +133,11 @@ public class Enemy : MonoBehaviour
 
     private void Died()
     {
+        if (anim != null)
+        {
+            anim.SetTrigger("Death");
+        }
+
         hasDied = true;
 
         Collider2D col = GetComponent<Collider2D>();
@@ -98,10 +147,50 @@ public class Enemy : MonoBehaviour
             col.enabled = false;
         }
 
-        rb.gravityScale = 1.5f;
+        rb.isKinematic = true;
         rb.drag = 0f;
-        sr.color = Color.gray;
 
-        Destroy(gameObject, 6f);
+
+    }
+
+    public void DeathFinished()
+    {
+        Destroy(gameObject);
+    }
+
+    public void Attack()
+    {
+        if (Time.time - LastAttackTime > attackInterval)
+        {
+            IsAttacking = true;
+            if (attackingRoutine != null)
+            {
+                StopCoroutine(attackingRoutine);
+            }
+
+            switch (enemyType)
+            {
+                case EnemyType.Orb:
+                    attackingRoutine = StartCoroutine(OrbAttack());
+                    break;
+            }
+        }
+    }
+
+    IEnumerator OrbAttack()
+    {
+        if (anim != null)
+        {
+            anim.SetTrigger("Attacking");
+        }
+
+        yield return new WaitForSeconds(0.5f);
+
+        Vector2 directionToPlayer = DwarfController.instance.hitCircle.transform.position - transform.position;
+        DwarfGameManager.instance.SpawnBullet(shootPoint.transform.position, directionToPlayer);
+
+        LastAttackTime = Time.time; 
+        IsAttacking = false;
+        yield return null;
     }
 }

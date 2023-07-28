@@ -20,11 +20,19 @@ public class UpgradeButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     public void OnPointerEnter(PointerEventData eventData)
     {
         MenuController.instance.HoverUpgradeButton(this);
+        //Animation anim = transform.parent.GetComponent<Animation>();
+        //anim["ButtonHover"].time = 0;
+        //anim["ButtonHover"].speed = 1f;
+        //anim.Play("ButtonHover");
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
         MenuController.instance.StopHoverButton();
+        //Animation anim = transform.parent.GetComponent<Animation>();
+        //anim["ButtonHover"].time = anim["ButtonHover"].length;
+        //anim["ButtonHover"].speed = -1f;
+        //anim.Play("ButtonHover");
     }
 
     public void ClickedBtn()
