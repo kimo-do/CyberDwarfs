@@ -1810,6 +1810,10 @@ MonoBehaviour:
     Type: 0
     Title: Featherweight Carbonite Armour
     Description: Reduce falling speed
+  - ID: 6
+    Type: 0
+    Title: Cape of Intergalactic Shift
+    Description: Unlock dash (press 'shift')
   spawnPoint: {fileID: 1846625080}
   enemyPfb: {fileID: 7370292720460250627, guid: d51d7ff584d6fe541a1e073ece6f25a5, type: 3}
   bulletPfb: {fileID: 8417026651600921873, guid: 543b469ed96132d4dbefc6f63f8d2469, type: 3}

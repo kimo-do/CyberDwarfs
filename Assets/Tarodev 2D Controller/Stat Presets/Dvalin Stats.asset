@@ -66,13 +66,15 @@ MonoBehaviour:
   StandUpOffset: {x: 0.19, y: 0.02}
   LedgeRaycastSpacing: 0.3
   LedgeClimbDuration: 0.5
-  AllowDash: 1
+  AllowDash: 0
   DashVelocity: 50
   DashDurationFrames: 5
   DashCooldown: 1.5
   DashEndHorizontalMultiplier: 0.25
   AllowAttacks: 1
+  AllowShoots: 1
   AttackFrameCooldown: 20
+  ShootFrameCooldown: 15
   ExternalVelocityDecay: 100
   ShowWallDetection: 1
   ShowLedgeDetection: 1

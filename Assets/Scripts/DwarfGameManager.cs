@@ -173,13 +173,13 @@ public class DwarfGameManager : MonoBehaviour
     {
         while (chrome.intensity.value < 1f)
         {
-            chrome.intensity.value = chrome.intensity.value + Time.deltaTime * 20f;
+            chrome.intensity.value = chrome.intensity.value + Time.deltaTime * 15f;
             yield return null;
         }
 
         while (chrome.intensity.value > 0f)
         {
-            chrome.intensity.value = chrome.intensity.value - Time.deltaTime * 20f;
+            chrome.intensity.value = chrome.intensity.value - Time.deltaTime * 15f;
             yield return null;
         }
 
