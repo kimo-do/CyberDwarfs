@@ -231,6 +231,10 @@ public class DwarfGameManager : MonoBehaviour
                 PlayerController.instance.PlayerStats.MaxFallSpeed -= (int)(PlayerController.instance.PlayerStats.MaxFallSpeed * 0.2f);
                 PlayerController.instance.PlayerStats.FallAcceleration -= (int)(PlayerController.instance.PlayerStats.FallAcceleration * 0.2f);
                 break;
+            // Dash
+            case 6:
+                PlayerController.instance.PlayerStats.AllowDash = true;
+                break;
         }
     }
 
