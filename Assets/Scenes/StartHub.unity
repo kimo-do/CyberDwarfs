@@ -9521,7 +9521,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: solana
+  m_text: '  olana'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 094d641c2e4727343afc230d5f132768, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 094d641c2e4727343afc230d5f132768, type: 2}
@@ -10577,6 +10577,75 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f4b6cb115cd96da42b39e85c256272fd, type: 3}
+--- !u!1001 &1494485541
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1946564979349063685, guid: da7ed1333e8b3a1469fda67074fb2ea4, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.77019
+      objectReference: {fileID: 0}
+    - target: {fileID: 1946564979349063685, guid: da7ed1333e8b3a1469fda67074fb2ea4, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.77019
+      objectReference: {fileID: 0}
+    - target: {fileID: 1946564979349063685, guid: da7ed1333e8b3a1469fda67074fb2ea4, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.77019
+      objectReference: {fileID: 0}
+    - target: {fileID: 1946564979349063685, guid: da7ed1333e8b3a1469fda67074fb2ea4, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -4.28
+      objectReference: {fileID: 0}
+    - target: {fileID: 1946564979349063685, guid: da7ed1333e8b3a1469fda67074fb2ea4, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.55
+      objectReference: {fileID: 0}
+    - target: {fileID: 1946564979349063685, guid: da7ed1333e8b3a1469fda67074fb2ea4, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1946564979349063685, guid: da7ed1333e8b3a1469fda67074fb2ea4, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1946564979349063685, guid: da7ed1333e8b3a1469fda67074fb2ea4, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1946564979349063685, guid: da7ed1333e8b3a1469fda67074fb2ea4, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1946564979349063685, guid: da7ed1333e8b3a1469fda67074fb2ea4, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1946564979349063685, guid: da7ed1333e8b3a1469fda67074fb2ea4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1946564979349063685, guid: da7ed1333e8b3a1469fda67074fb2ea4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1946564979349063685, guid: da7ed1333e8b3a1469fda67074fb2ea4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2991362980055618939, guid: da7ed1333e8b3a1469fda67074fb2ea4, type: 3}
+      propertyPath: m_Name
+      value: dwarfMonitor_4_0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: da7ed1333e8b3a1469fda67074fb2ea4, type: 3}
 --- !u!1 &1519722298
 GameObject:
   m_ObjectHideFlags: 0
@@ -11829,3 +11898,4 @@ SceneRoots:
   - {fileID: 2116257474}
   - {fileID: 683867454}
   - {fileID: 392578138}
+  - {fileID: 1494485541}
