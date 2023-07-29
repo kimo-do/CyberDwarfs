@@ -17,11 +17,16 @@ public class DwarfController : MonoBehaviour
     [Header("Settings")]
     public int defaultDamage = 40;
     public int defaultBulletDamage = 30;
+    public float defaultAllyBulletSpeed = 10f;
+    public float defaultenemyBulletSpeed = 5f;
+
 
     public float defaultAttackTime = 0.6f;
 
     public int Damage { get; set; }
     public int ShootDamage { get; set; }
+    public float BulletSpeed { get; set; }
+    public float OrbBulletSpeed { get; set; }
     public float AttackTime { get; set; }
     public Rigidbody2D Rb { get => rb; set => rb = value; }
 
@@ -45,6 +50,8 @@ public class DwarfController : MonoBehaviour
         Damage = defaultDamage;
         ShootDamage = defaultBulletDamage;
         AttackTime = defaultAttackTime;
+        BulletSpeed = defaultAllyBulletSpeed;
+        OrbBulletSpeed = defaultenemyBulletSpeed;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

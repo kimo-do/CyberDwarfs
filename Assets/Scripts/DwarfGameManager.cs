@@ -57,7 +57,7 @@ public class DwarfGameManager : MonoBehaviour
         newBullet.GetComponent<Bullet>().Damage = damage;
         newBullet.transform.right = direction;
 
-        float forceMultiplier = ally ? 10f : 5f;
+        float forceMultiplier = ally ? DwarfController.instance.BulletSpeed : DwarfController.instance.OrbBulletSpeed;
 
         newBullet.GetComponent<Rigidbody2D>().AddForce(newBullet.transform.right * forceMultiplier, ForceMode2D.Impulse);
 
@@ -247,6 +247,30 @@ public class DwarfGameManager : MonoBehaviour
             // Dash
             case 6:
                 PlayerController.instance.PlayerStats.AllowDash = true;
+                break;
+            // Extra bullet damage
+            case 7:
+                DwarfController.instance.ShootDamage += (int)(DwarfController.instance.ShootDamage * 0.2f);
+                break;
+            // Extra bullet damage
+            case 8:
+                DwarfController.instance.ShootDamage += (int)(DwarfController.instance.ShootDamage * 0.2f);
+                break;
+            // Extra bullet damage
+            case 9:
+                DwarfController.instance.ShootDamage += (int)(DwarfController.instance.ShootDamage * 0.2f);
+                break;
+            // 20% more atk damage
+            case 10:
+                DwarfController.instance.Damage += (int)(DwarfController.instance.Damage * 0.2f);
+                break;
+            // 20% more atk damage
+            case 11:
+                DwarfController.instance.Damage += (int)(DwarfController.instance.Damage * 0.2f);
+                break;
+            // Increase bullet speed
+            case 12:
+                DwarfController.instance.BulletSpeed += (int)(DwarfController.instance.BulletSpeed * 0.2f);
                 break;
         }
     }
