@@ -19,6 +19,9 @@ public class DwarfGameManager : MonoBehaviour
     [SerializeField] private GameObject slimeEnemyPfb;
     [SerializeField] private GameObject bulletPfb;
     [SerializeField] private GameObject allyBulletPfb;
+    public GameObject anvilEffect;
+    public PowerUP powerup1;
+    public PowerUP powerup2;
     [SerializeField] private List<Transform> enemySpawns;
     [SerializeField] private List<Transform> enemySlimeSpawns;
 
@@ -220,6 +223,12 @@ public class DwarfGameManager : MonoBehaviour
         }
 
         Components++;
+
+        if (Components >= 3)
+        {
+            anvilEffect.gameObject.SetActive(true);
+        }
+
         MenuController.instance.SetCompononents(Components);
     }
 
@@ -268,6 +277,7 @@ public class DwarfGameManager : MonoBehaviour
                 // Extra jump
             case 1:
                 PlayerController.instance.PlayerStats.MaxAirJumps++;
+                PlayerController.instance.ResetAirJumps();
                 break;
                 // 20% more atk damage
             case 2:

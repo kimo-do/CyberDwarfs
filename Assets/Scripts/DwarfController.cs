@@ -13,10 +13,11 @@ public class DwarfController : MonoBehaviour
     public Transform gun;
     public Transform gunNossle;
     public Animator swooshAnim;
+    public ParticleSystem shieldEffect;
 
     [Header("Settings")]
-    public int defaultDamage = 40;
-    public int defaultBulletDamage = 30;
+    public int defaultDamage = 60;
+    public int defaultBulletDamage = 40;
     public float defaultAllyBulletSpeed = 10f;
     public float defaultenemyBulletSpeed = 5f;
 
@@ -132,7 +133,7 @@ public class DwarfController : MonoBehaviour
 
         GameObject swoosh = Instantiate(swooshAnim.gameObject, swooshAnim.transform.position, swooshAnim.transform.rotation);
         swoosh.GetComponent<Animator>().SetTrigger("Slash");
-        Destroy(swoosh, 3f);
+        Destroy(swoosh, 0.25f);
 
         if (hits.Count > 0)
         {

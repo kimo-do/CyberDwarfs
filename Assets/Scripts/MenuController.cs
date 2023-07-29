@@ -215,6 +215,15 @@ public class MenuController : MonoBehaviour
             DwarfGameManager.instance.Components = DwarfGameManager.instance.Components - 3;
             SetCompononents(DwarfGameManager.instance.Components);
             CloseUpgradeScreen();
+
+            if (DwarfGameManager.instance.Components >= 3)
+            {
+                DwarfGameManager.instance.anvilEffect.gameObject.SetActive(true);
+            }
+            else
+            {
+                DwarfGameManager.instance.anvilEffect.gameObject.SetActive(false);
+            }
         }
         else
         {

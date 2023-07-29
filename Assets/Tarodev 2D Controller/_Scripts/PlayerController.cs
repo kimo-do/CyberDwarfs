@@ -489,7 +489,7 @@ namespace TarodevController {
             ResetAirJumps();
         }
 
-        protected virtual void ResetAirJumps() => _airJumpsRemaining = runTimeStats.MaxAirJumps;
+        public virtual void ResetAirJumps() => _airJumpsRemaining = runTimeStats.MaxAirJumps;
 
         #endregion
 
