@@ -16,6 +16,7 @@ public class MenuController : MonoBehaviour
     public RectTransform introScreen;
     public RectTransform mainGameScreen;
     public RectTransform upgradeScreen;
+    public RectTransform upgradesBar;
     public CanvasGroup fadeToBlack;
     public Animation backpackTip;
     public float fadeSpeed = 1f;
@@ -24,18 +25,26 @@ public class MenuController : MonoBehaviour
     [SerializeField] private RectTransform livesRect;
     [SerializeField] private GameObject heartTemplate;
     [SerializeField] private GameObject armourTemplate;
+    [SerializeField] private GameObject upgradeTemplate;
 
     // Upgrades
     public UpgradeButton upgrade1btn;
     public UpgradeButton upgrade2btn;
     public UpgradeButton upgrade3btn;
     public TextMeshProUGUI explainText;
+    public TextMeshProUGUI errText;
     public Sprite meleeIcon;
     public Sprite rangedIcon;
     public Sprite miscIcon;
 
+    public TextMeshProUGUI componentsCountText;
+    public TextMeshProUGUI upgradeAvailableText;
+
+
     private List<GameObject> spawnedLivesUI = new();
     private List<GameObject> spawnedArmourUI = new();
+    private List<GameObject> spawnedUpgradesUI = new();
+
 
     private bool startedGame = false;
 
@@ -159,6 +168,20 @@ public class MenuController : MonoBehaviour
         }
     }
 
+    public void SetCompononents(int amount)
+    {
+        componentsCountText.text = amount.ToString();
+
+        if (amount >= 3)
+        {
+            upgradeAvailableText.gameObject.SetActive(true);
+        }
+        else
+        {
+            upgradeAvailableText.gameObject.SetActive(false);
+        }
+    }
+
     public void LooseLive()
     {
         if (spawnedLivesUI.Count > 0)
@@ -186,17 +209,39 @@ public class MenuController : MonoBehaviour
 
     public void ClickUpgradeButton(UpgradeButton upBtn)
     {
-        ChooseUpgrade(upBtn.StoredUpgrade);
-        upgradeScreen.gameObject.SetActive(false);
-        Time.timeScale = 1f;
-        PlayerController.instance.enabled = true;
-        DwarfController.instance.enabled = true;
-        HasOpenAnvil = false;
+        if (DwarfGameManager.instance.Components >= 3)
+        {
+            ChooseUpgrade(upBtn.StoredUpgrade);
+            DwarfGameManager.instance.Components = DwarfGameManager.instance.Components - 3;
+            SetCompononents(DwarfGameManager.instance.Components);
+            CloseUpgradeScreen();
+        }
+        else
+        {
+            errText.gameObject.SetActive(true);
+        }
     }
 
     private void ChooseUpgrade(Upgrade upgrade)
     {
         DwarfGameManager.instance.ApplyUpgrade(upgrade);
+    }
+
+    public void AddUpgrade()
+    {
+        GameObject UIUpgrade = Instantiate(upgradeTemplate, upgradeTemplate.transform.parent);   
+        UIUpgrade.SetActive(true);
+        spawnedUpgradesUI.Add(UIUpgrade);
+    }
+
+    public void ClearUpgrades()
+    {
+        foreach (var up in spawnedUpgradesUI)
+        {
+            Destroy(up);
+        }
+
+        spawnedUpgradesUI.Clear();
     }
 
     public void HoverUpgradeButton(UpgradeButton upBtn)
@@ -209,12 +254,23 @@ public class MenuController : MonoBehaviour
         explainText.text = "";
     }
 
+    public void CloseUpgradeScreen()
+    {
+        upgradeScreen.gameObject.SetActive(false);
+        Time.timeScale = 1f;
+        PlayerController.instance.enabled = true;
+        DwarfController.instance.enabled = true;
+        HasOpenAnvil = false;
+    }
+
     private void OpenCraftingUI()
     {
         HasOpenAnvil = true;
         DwarfController.instance.enabled = false;    
         PlayerController.instance.enabled = false;
         Time.timeScale = 0f;
+
+        errText.gameObject.SetActive(false);
 
         List<Upgrade> availableUpgrades = new(DwarfGameManager.instance.upgradePool);
         availableUpgrades.RemoveAll(u => DwarfGameManager.instance.AppliedUpgrades.Contains(u));

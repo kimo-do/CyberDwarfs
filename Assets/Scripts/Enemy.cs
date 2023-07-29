@@ -134,6 +134,8 @@ public class Enemy : MonoBehaviour
 
     private void Died()
     {
+        DwarfGameManager.instance.OnEnemyDied();
+
         if (anim != null)
         {
             anim.SetTrigger("Death");

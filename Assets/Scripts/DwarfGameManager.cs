@@ -24,6 +24,8 @@ public class DwarfGameManager : MonoBehaviour
     [SerializeField] private int defaultLives;
 
     public int Lives { get; set; }
+
+    public int Components { get; set; }
     public bool IsPlayerDeath { get => isPlayerDeath; set => isPlayerDeath = value; }
     public List<Upgrade> AppliedUpgrades { get => appliedUpgrades; set => appliedUpgrades = value; }
 
@@ -54,7 +56,10 @@ public class DwarfGameManager : MonoBehaviour
         GameObject newBullet = Instantiate(ally ? allyBulletPfb : bulletPfb, from, Quaternion.identity);
         newBullet.GetComponent<Bullet>().Damage = damage;
         newBullet.transform.right = direction;
-        newBullet.GetComponent<Rigidbody2D>().AddForce(newBullet.transform.right * 5f, ForceMode2D.Impulse);
+
+        float forceMultiplier = ally ? 10f : 5f;
+
+        newBullet.GetComponent<Rigidbody2D>().AddForce(newBullet.transform.right * forceMultiplier, ForceMode2D.Impulse);
 
         if (ally)
         {
@@ -82,6 +87,7 @@ public class DwarfGameManager : MonoBehaviour
         Lives = defaultLives;
 
         MenuController.instance.InitLives(Lives);
+        MenuController.instance.SetCompononents(Components);
 
         DwarfController.instance.transform.position = spawnPoint.position;
     }
@@ -168,6 +174,12 @@ public class DwarfGameManager : MonoBehaviour
 
     }
 
+    public void OnEnemyDied()
+    {
+        Components++;
+        MenuController.instance.SetCompononents(Components);
+    }
+
 
     IEnumerator ChromeHitEffect(Action DoneHit)
     {
@@ -205,6 +217,7 @@ public class DwarfGameManager : MonoBehaviour
         if (!AppliedUpgrades.Contains(upgrade))
         {
             AppliedUpgrades.Add(upgrade);
+            MenuController.instance.AddUpgrade();
         }
 
         switch (upgrade.ID)
