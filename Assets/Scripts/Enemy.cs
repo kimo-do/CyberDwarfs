@@ -15,6 +15,19 @@ public class Enemy : MonoBehaviour
     public EnemyType enemyType;
     public float attackInterval = 2f;
 
+    public int ID { get; set; }
+
+    private static int lastId;
+
+    public static int NewId
+    {
+        get
+        {
+            lastId += 1;
+            return lastId;
+        }
+    }
+
     public int CurrentHealth { get; set; }
     public int MaxHealth { get; set; }
 
@@ -134,7 +147,7 @@ public class Enemy : MonoBehaviour
 
     private void Died()
     {
-        DwarfGameManager.instance.OnEnemyDied();
+        DwarfGameManager.instance.OnEnemyDied(ID);
 
         if (anim != null)
         {

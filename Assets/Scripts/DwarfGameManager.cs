@@ -1,10 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TarodevController;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
+using static UnityEngine.Rendering.DebugUI;
 
 public class DwarfGameManager : MonoBehaviour
 {
@@ -14,9 +16,12 @@ public class DwarfGameManager : MonoBehaviour
 
     [SerializeField] private Transform spawnPoint;
     [SerializeField] private GameObject enemyPfb;
+    [SerializeField] private GameObject slimeEnemyPfb;
     [SerializeField] private GameObject bulletPfb;
     [SerializeField] private GameObject allyBulletPfb;
     [SerializeField] private List<Transform> enemySpawns;
+    [SerializeField] private List<Transform> enemySlimeSpawns;
+
     public Volume globalVolume;
 
 
@@ -30,12 +35,17 @@ public class DwarfGameManager : MonoBehaviour
     public List<Upgrade> AppliedUpgrades { get => appliedUpgrades; set => appliedUpgrades = value; }
 
     private float lastEnemySpawn;
+    private float lastSlimeSpawn;
+    private float slimeSpawnTimer = 30f;
+    private float orbSpawnTimer = 15f;
+    private float lastGameDifficultyIncrease;
     private bool isPlayerDeath;
     private ChromaticAberration chrome;
     private ColorAdjustments colorAdjust;
     private Coroutine chromeRoutine;
     private Coroutine upgradesRoutine;
     private List<Upgrade> appliedUpgrades = new();
+    private Dictionary<Transform, int> spawnedSlimes = new Dictionary<Transform, int>();
 
     private void Awake()
     {
@@ -49,6 +59,7 @@ public class DwarfGameManager : MonoBehaviour
     void Start()
     {
         Initialize();
+        lastGameDifficultyIncrease = Time.time;
     }    
 
     public void SpawnBullet(Vector2 from, Vector2 direction, int damage, bool ally = false)
@@ -146,13 +157,40 @@ public class DwarfGameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Time.time - lastEnemySpawn > 10f)
+        if (Time.time - lastEnemySpawn > orbSpawnTimer)
         {
             GameObject enemy = Instantiate(enemyPfb);
-
+            Enemy enemyScript = enemy.GetComponent<Enemy>();
+            enemyScript.ID = Enemy.NewId;
             Vector2 rdnspawnpos = enemySpawns[UnityEngine.Random.Range(0, enemySpawns.Count)].position;
             enemy.transform.position = rdnspawnpos;
             lastEnemySpawn = Time.time;
+        }
+
+        if (Time.time - lastSlimeSpawn > slimeSpawnTimer)
+        {
+            List<Transform> availableSlimeSpawns = enemySlimeSpawns.Where(s => !spawnedSlimes.ContainsKey(s)).ToList();
+
+            if (availableSlimeSpawns.Count > 0)
+            {
+                GameObject enemy = Instantiate(slimeEnemyPfb);
+                Transform rdnSpawn = availableSlimeSpawns[UnityEngine.Random.Range(0, availableSlimeSpawns.Count)];
+                Vector2 rdnspawnpos = rdnSpawn.position;
+                enemy.transform.position = rdnspawnpos;
+                Enemy enemyScript = enemy.GetComponent<Enemy>();
+                enemyScript.ID = Enemy.NewId;
+                spawnedSlimes[rdnSpawn] = enemyScript.ID;
+            }
+
+            lastSlimeSpawn = Time.time;
+
+        }
+
+        if (Time.time - lastGameDifficultyIncrease > 60f)
+        {
+            slimeSpawnTimer *= 0.8f;
+            orbSpawnTimer *= 0.8f;
+            lastGameDifficultyIncrease = Time.time;
         }
 
         if (Vector2.Distance(DwarfController.instance.transform.position, Anvil.instance.transform.position) < 2.5f)
@@ -174,8 +212,13 @@ public class DwarfGameManager : MonoBehaviour
 
     }
 
-    public void OnEnemyDied()
+    public void OnEnemyDied(int enemyID)
     {
+        foreach (var item in spawnedSlimes.Where(kvp => kvp.Value == enemyID).ToList())
+        {
+            spawnedSlimes.Remove(item.Key);
+        }
+
         Components++;
         MenuController.instance.SetCompononents(Components);
     }
