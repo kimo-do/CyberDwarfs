@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.solana.unity_sdk": "https://github.com/magicblock-labs/Solana.Unity-SDK.git",
     "com.unity.cinemachine": "2.9.7",
     "com.unity.collab-proxy": "2.0.5",
     "com.unity.feature.2d": "2.0.0",

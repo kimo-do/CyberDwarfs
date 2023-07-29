@@ -1,3 +1,5 @@
+using Solana.Unity.SDK;
+using Solana.Unity.Wallet;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -40,6 +42,10 @@ public class MenuController : MonoBehaviour
     public TextMeshProUGUI componentsCountText;
     public TextMeshProUGUI upgradeAvailableText;
 
+    // NFT
+    public Button connectWalletBtn;
+    public TextMeshProUGUI connectStatusText;
+
 
     private List<GameObject> spawnedLivesUI = new();
     private List<GameObject> spawnedArmourUI = new();
@@ -65,6 +71,8 @@ public class MenuController : MonoBehaviour
     private void Awake()
     {
         instance = this;
+
+        connectWalletBtn.onClick.AddListener(LoginCheckerWalletAdapter);
     }
 
     private void Start()
@@ -315,4 +323,33 @@ public class MenuController : MonoBehaviour
         upgradeScreen.gameObject.SetActive(true);
     }
 
+
+    // web3
+
+    public async void LoginCheckerWalletAdapter()
+    {
+        if (Web3.Instance == null) return;
+        var account = await Web3.Instance.LoginWalletAdapter();
+        CheckAccount(account);
+    }
+
+    private void CheckAccount(Account account)
+    {
+        if (account != null)
+        {
+            // Succesful login
+            //dropdownRpcCluster.interactable = false;
+            //manager.ShowScreen(this, "wallet_screen");
+            //messageTxt.gameObject.SetActive(false);
+            //gameObject.SetActive(false);
+            connectStatusText.text = "Connected";
+        }
+        else
+        {
+            // wallet connect failed
+            //passwordInputField.text = string.Empty;
+            //messageTxt.gameObject.SetActive(true);
+            connectStatusText.text = "Connect";
+        }
+    }
 }
