@@ -17,6 +17,7 @@ public class MenuController : MonoBehaviour
     public RectTransform mainGameScreen;
     public RectTransform upgradeScreen;
     public CanvasGroup fadeToBlack;
+    public Animation backpackTip;
     public float fadeSpeed = 1f;
 
     // Main UI
@@ -61,6 +62,26 @@ public class MenuController : MonoBehaviour
     {
         DontDestroyOnLoad(gameObject);
         introScreen.gameObject.SetActive(true);
+
+        StartCoroutine(ShowTipAfterWhile());
+    }
+
+    IEnumerator ShowTipAfterWhile()
+    {
+        yield return new WaitForSeconds(6f);
+
+        if (Screen.width < Screen.height)
+        {
+            backpackTip["Tip"].time = 0;
+            backpackTip["Tip"].speed = 1f;
+            backpackTip.Play("Tip");
+
+            yield return new WaitForSeconds(7f);
+
+            backpackTip["Tip"].time = backpackTip["Tip"].length;
+            backpackTip["Tip"].speed = -1f;
+            backpackTip.Play("Tip");
+        }
     }
 
     public void StartGame()
