@@ -506,7 +506,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &125134367
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1704,10 +1704,42 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 743265281}
     m_Modifications:
+    - target: {fileID: 3185731529288969215, guid: f531b22dced456f4cb7c97e3fdcf3ecc, type: 3}
+      propertyPath: m_fontSize
+      value: 53.07
+      objectReference: {fileID: 0}
+    - target: {fileID: 3185731529288969215, guid: f531b22dced456f4cb7c97e3fdcf3ecc, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 53.07
+      objectReference: {fileID: 0}
     - target: {fileID: 3957881033603860221, guid: f531b22dced456f4cb7c97e3fdcf3ecc, type: 3}
       propertyPath: m_Name
       value: Title (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 3957881033603860221, guid: f531b22dced456f4cb7c97e3fdcf3ecc, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4235749222201306129, guid: f531b22dced456f4cb7c97e3fdcf3ecc, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8674fb5f05a42ab4287392f93ffb9f87, type: 2}
+    - target: {fileID: 4235749222201306129, guid: f531b22dced456f4cb7c97e3fdcf3ecc, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 2180264, guid: 8674fb5f05a42ab4287392f93ffb9f87, type: 2}
+    - target: {fileID: 4235749222201306129, guid: f531b22dced456f4cb7c97e3fdcf3ecc, type: 3}
+      propertyPath: m_hasFontAssetChanged
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4235749222201306129, guid: f531b22dced456f4cb7c97e3fdcf3ecc, type: 3}
+      propertyPath: m_enableVertexGradient
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4235749222201306129, guid: f531b22dced456f4cb7c97e3fdcf3ecc, type: 3}
+      propertyPath: m_fontColorGradientPreset
+      value: 
+      objectReference: {fileID: 11400000, guid: 90c835326b025c04baf944cdcd73a6f8, type: 2}
     - target: {fileID: 4464390257901507766, guid: f531b22dced456f4cb7c97e3fdcf3ecc, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -1734,7 +1766,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4464390257901507766, guid: f531b22dced456f4cb7c97e3fdcf3ecc, type: 3}
       propertyPath: m_SizeDelta.x
-      value: -244.02258
+      value: -1483.9
       objectReference: {fileID: 0}
     - target: {fileID: 4464390257901507766, guid: f531b22dced456f4cb7c97e3fdcf3ecc, type: 3}
       propertyPath: m_SizeDelta.y
@@ -1770,11 +1802,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4464390257901507766, guid: f531b22dced456f4cb7c97e3fdcf3ecc, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -85
+      value: 62.08
       objectReference: {fileID: 0}
     - target: {fileID: 4464390257901507766, guid: f531b22dced456f4cb7c97e3fdcf3ecc, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -487
+      value: -300
       objectReference: {fileID: 0}
     - target: {fileID: 4464390257901507766, guid: f531b22dced456f4cb7c97e3fdcf3ecc, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1787,6 +1819,18 @@ PrefabInstance:
     - target: {fileID: 4464390257901507766, guid: f531b22dced456f4cb7c97e3fdcf3ecc, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6653672745226177672, guid: f531b22dced456f4cb7c97e3fdcf3ecc, type: 3}
+      propertyPath: m_Alpha
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6887501923362296704, guid: f531b22dced456f4cb7c97e3fdcf3ecc, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 141.67
+      objectReference: {fileID: 0}
+    - target: {fileID: 6887501923362296704, guid: f531b22dced456f4cb7c97e3fdcf3ecc, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -91
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -10884,7 +10928,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 341, y: -150}
+  m_AnchoredPosition: {x: 300, y: -150}
   m_SizeDelta: {x: 916.4619, y: 361.1905}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &919663317
@@ -12392,7 +12436,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 268, y: -174}
+  m_AnchoredPosition: {x: 596, y: -173}
   m_SizeDelta: {x: 916.4619, y: 361.1905}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1519722300
@@ -12415,10 +12459,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: of
+  m_text: OF
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 094d641c2e4727343afc230d5f132768, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 094d641c2e4727343afc230d5f132768, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -12868,8 +12912,8 @@ MonoBehaviour:
 
     Quit game and press <b>CTRL + G</b> to play fullscreen'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: c6b6f9e8edc3eaa49b8d8339439d6347, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: c6b6f9e8edc3eaa49b8d8339439d6347, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -12932,7 +12976,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &1599998953
