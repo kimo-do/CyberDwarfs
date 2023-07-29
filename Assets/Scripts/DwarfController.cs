@@ -12,7 +12,7 @@ public class DwarfController : MonoBehaviour
     public Transform hitCircle;
     public Transform gun;
     public Transform gunNossle;
-    public Animation anim;
+    public Animator swooshAnim;
 
     [Header("Settings")]
     public int defaultDamage = 40;
@@ -123,8 +123,10 @@ public class DwarfController : MonoBehaviour
     {
         List<GameObject> hits = hitArea.GetEnemyCollisions();
 
-        anim["Hit"].speed = 3f;
-        anim.Play();
+        GameObject swoosh = Instantiate(swooshAnim.gameObject, swooshAnim.transform.position, swooshAnim.transform.rotation);
+        swoosh.GetComponent<Animator>().SetTrigger("Slash");
+        Destroy(swoosh, 3f);
+
         if (hits.Count > 0)
         {
             foreach (var enemyGO in hits)
