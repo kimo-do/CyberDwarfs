@@ -1,6 +1,11 @@
 # The last dwarf of Solana
 Project build for solana speedrun gamejam
 
+## xNFT
+
+This game is available as an xNFT using the backpack wallet:
+https://www.xnft.gg/app/7kvfHqBhEWEEB3CYPHar1f2EGe5FLS7YJv5wambhmgoM
+
 ## Lore
 
 (**disclaimer:** written with the assistance of ChatGPT)
