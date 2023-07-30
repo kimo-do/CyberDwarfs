@@ -207,15 +207,15 @@ public class MenuController : MonoBehaviour
         AfterFade?.Invoke();
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.O))
-        {
-            ScreenCapture.CaptureScreenshot($"dwarf_{DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss")}.png");
-            ScreenCapture.CaptureScreenshot($"dwarf_{DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss")}_Super.png", 2);
+    //private void Update()
+    //{
+    //    if (Input.GetKeyDown(KeyCode.O))
+    //    {
+    //        ScreenCapture.CaptureScreenshot($"dwarf_{DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss")}.png");
+    //        ScreenCapture.CaptureScreenshot($"dwarf_{DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss")}_Super.png", 2);
 
-        }
-    }
+    //    }
+    //}
 
     public void InitLives(int Lives)
     {
@@ -409,6 +409,7 @@ public class MenuController : MonoBehaviour
             //gameObject.SetActive(false);
             connectStatusText.text = "Connected";
             connectWalletBtn.GetComponent<Image>().color = connectedColor;
+            NFTFetcher.instance.RefreshWallet();
         }
         else
         {

@@ -213,6 +213,7 @@ namespace Solana.Unity.SDK.Example
             base.ShowScreen();
             gameObject.SetActive(true);
             GetOwnedTokenAccounts().Forget();
+            NFTFetcher.instance.RefreshWallet();
         }
 
         public override void HideScreen()

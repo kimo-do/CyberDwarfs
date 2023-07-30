@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -25,6 +26,9 @@ public class DwarfGameManager : MonoBehaviour
     [SerializeField] private List<Transform> enemySpawns;
     [SerializeField] private List<Transform> enemySlimeSpawns;
 
+    public List<VisualNFT> ingameNftsScreens;
+    private Dictionary<VisualNFT, bool> usedScreens = new();
+
     public Volume globalVolume;
 
 
@@ -50,12 +54,29 @@ public class DwarfGameManager : MonoBehaviour
     private List<Upgrade> appliedUpgrades = new();
     private Dictionary<Transform, int> spawnedSlimes = new Dictionary<Transform, int>();
 
+    public VisualNFT GetUnusedScreen()
+    {
+        if (usedScreens.ToList().Any(s => s.Value == false))
+        {
+            VisualNFT vnft = usedScreens.FirstOrDefault(s => s.Value == false).Key;
+            usedScreens[vnft] = true;
+            return vnft;
+        }
+
+        return null;
+    }
+
     private void Awake()
     {
         instance = this;
 
         globalVolume.profile.TryGet(out chrome);
         globalVolume.profile.TryGet(out colorAdjust);
+
+        foreach (var s in ingameNftsScreens)
+        {
+            usedScreens[s] = false;
+        }
     }
 
     // Start is called before the first frame update
@@ -63,7 +84,23 @@ public class DwarfGameManager : MonoBehaviour
     {
         Initialize();
         lastGameDifficultyIncrease = Time.time;
-    }    
+        StartCoroutine(ShowNFTS());
+    }
+    
+    IEnumerator ShowNFTS()
+    {
+        yield return new WaitForSeconds(2f);
+
+        foreach (var fetchednft in NFTFetcher.instance.FetchedNFTs)
+        {
+            VisualNFT visualNFT = GetUnusedScreen();
+
+            if (visualNFT != null)
+            {
+                visualNFT.SetNFT(fetchednft.account, fetchednft.NFT);
+            }
+        }
+    }
 
     public void SpawnBullet(Vector2 from, Vector2 direction, int damage, bool ally = false)
     {
