@@ -24,15 +24,20 @@ public class DwarfController : MonoBehaviour
 
 
     public float defaultAttackTime = 0.6f;
+    public float defaultShootTime = 0.6f;
+
 
     public int Damage { get; set; }
     public int ShootDamage { get; set; }
     public float BulletSpeed { get; set; }
     public float OrbBulletSpeed { get; set; }
     public float AttackTime { get; set; }
+    public float ShootTime { get; set; }
     public Rigidbody2D Rb { get => rb; set => rb = value; }
 
     private float lastAttackTime;
+    private float lastShootTime;
+
 
     private Rigidbody2D rb;
 
@@ -52,6 +57,7 @@ public class DwarfController : MonoBehaviour
         Damage = defaultDamage;
         ShootDamage = defaultBulletDamage;
         AttackTime = defaultAttackTime;
+        ShootTime = defaultShootTime;
         BulletSpeed = defaultAllyBulletSpeed;
         OrbBulletSpeed = defaultenemyBulletSpeed;
     }
@@ -68,8 +74,8 @@ public class DwarfController : MonoBehaviour
                     {
                         enemy.LastHitTime = Time.time;
 
-                        Vector2 awayFromPlayerDir = enemy.transform.position - transform.position;
-                        PlayerController.instance.ApplyVelocity(awayFromPlayerDir, PlayerForce.Burst);
+                        Vector2 awayFromPlayerDir = transform.position - enemy.transform.position;
+                        PlayerController.instance.ApplyVelocity(awayFromPlayerDir * 50f, PlayerForce.Burst);
                         //enemy.Bounce(awayFromPlayerDir);
 
                         DwarfGameManager.instance.LooseLive();
@@ -96,10 +102,10 @@ public class DwarfController : MonoBehaviour
             // Shoot attack
             if (Input.GetMouseButtonDown(1))
             {
-                if (Time.time - lastAttackTime >= AttackTime)
+                if (Time.time - lastShootTime >= ShootTime)
                 {
                     DoShoot();
-                    lastAttackTime = Time.time;
+                    lastShootTime = Time.time;
                 }
             }
         }

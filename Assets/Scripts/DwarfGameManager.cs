@@ -45,6 +45,7 @@ public class DwarfGameManager : MonoBehaviour
     private float lastSlimeSpawn;
     private float slimeSpawnTimer = 30f;
     private float orbSpawnTimer = 15f;
+    private int maxLives = 10;
     private float lastGameDifficultyIncrease;
     private bool isPlayerDeath;
     private ChromaticAberration chrome;
@@ -170,9 +171,11 @@ public class DwarfGameManager : MonoBehaviour
     {
         if (isPlayerDeath) return;
 
-        Lives++;
-
-        MenuController.instance.GainLive();
+        if (Lives < maxLives)
+        {
+            Lives++;
+            MenuController.instance.GainLive();
+        }
     }
 
     public void PlayerDeath()
@@ -376,6 +379,41 @@ public class DwarfGameManager : MonoBehaviour
             // Increase bullet speed
             case 12:
                 DwarfController.instance.BulletSpeed += (int)(DwarfController.instance.BulletSpeed * 0.2f);
+                break;
+            // Increase bullet speed
+            case 13:
+                DwarfController.instance.BulletSpeed += (int)(DwarfController.instance.BulletSpeed * 0.2f);
+                break;
+            // Shoot more frequently
+            case 14:
+                DwarfController.instance.ShootTime -= (int)(DwarfController.instance.ShootTime * 0.2f);
+                break;
+            // Shoot more frequently
+            case 15:
+                DwarfController.instance.ShootTime -= (int)(DwarfController.instance.ShootTime * 0.2f);
+                break;
+            // Attack more frequently
+            case 16:
+                DwarfController.instance.AttackTime -= (int)(DwarfController.instance.AttackTime * 0.2f);
+                break;
+            // Attack more frequently
+            case 17:
+                DwarfController.instance.AttackTime -= (int)(DwarfController.instance.AttackTime * 0.2f);
+                break;
+            // Gain extra lives
+            case 18:
+                GainLive();
+                break;
+            // Gain extra lives
+            case 19:
+                GainLive();
+                GainLive();
+                break;
+            // Gain extra lives
+            case 20:
+                GainLive();
+                GainLive();
+                GainLive();
                 break;
         }
     }

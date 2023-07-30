@@ -1888,6 +1888,38 @@ MonoBehaviour:
     Type: 2
     Title: Hypercharged Barrel
     Description: Increase bullet travel speed
+  - ID: 13
+    Type: 2
+    Title: High velocity nozzle
+    Description: Increase bullet travel speed
+  - ID: 14
+    Type: 2
+    Title: Litium-Lined Magazine
+    Description: Can shoot more frequently
+  - ID: 15
+    Type: 2
+    Title: Subzero Barrel Cooler
+    Description: Can shoot more frequently
+  - ID: 16
+    Type: 1
+    Title: Hyperspring Gloves
+    Description: Can melee attack more frequently
+  - ID: 17
+    Type: 1
+    Title: Carbon Axe Handles
+    Description: Can melee attack more frequently
+  - ID: 18
+    Type: 0
+    Title: Revitalizing Juice
+    Description: Immediately gain 1 extra live
+  - ID: 19
+    Type: 0
+    Title: Revitalizing Syringe
+    Description: Immediately gain 2 extra lives
+  - ID: 20
+    Type: 0
+    Title: Revitalizing Overload
+    Description: Immediately gain 3 extra lives
   spawnPoint: {fileID: 1846625080}
   enemyPfb: {fileID: 7370292720460250627, guid: d51d7ff584d6fe541a1e073ece6f25a5, type: 3}
   slimeEnemyPfb: {fileID: 2870138189079412572, guid: 7aff13a27760b544988b017178255c6b, type: 3}

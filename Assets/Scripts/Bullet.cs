@@ -35,4 +35,19 @@ public class Bullet : MonoBehaviour
         Destroy(gameObject, 2f);
     }
 
+    float spawnTime;
+
+    private void Start()
+    {
+        spawnTime = Time.time;
+    }
+
+    private void Update()
+    {
+        if (Time.time - spawnTime > 30f)
+        {
+            Destroy(gameObject);
+        }
+    }
+
 }
