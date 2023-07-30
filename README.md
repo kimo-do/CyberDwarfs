@@ -1,7 +1,11 @@
 # The last dwarf of Solana
 Project build for solana speedrun gamejam
 
-External resources used:
+**Demo:**
+
+https://github.com/kimo-do/CyberDwarfs/assets/68615862/41c84abd-1dca-4945-ae5f-343b7a616af9
+
+**External resources used:**
 
 MagicBlock Solana SDK (https://github.com/magicblock-labs/Solana.Unity-SDK)
 
