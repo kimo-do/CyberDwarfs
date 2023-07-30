@@ -5,17 +5,17 @@ Project build for solana speedrun gamejam
 
 (**disclaimer:** written with the assistance of ChatGPT)
 
-```
-In an age where the future intertwines with the forgotten past, the world has evolved beyond nature's constraints. Vast cities rise with architecture formed from organic materials and technology that speaks of innovations incomprehensible to our ancestors. But deep below these towering metropolises, hidden within the belly of the earth, lay remnants of a bygone era.
 
-Dvalin, the last cybernetic dwarf of a once-thriving underground colony, awakens amidst the ruins of his home. Crimson hair flickering like a beacon in the dark, circuits embedded into his skin pulse with a dim glow. Memories of laughter, community, and machines harmonizing their tasks were now replaced by eerie silence, broken only by the low hum of forgotten machinery.
+_In an age where the future intertwines with the forgotten past, the world has evolved beyond nature's constraints. Vast cities rise with architecture formed from organic materials and technology that speaks of innovations incomprehensible to our ancestors. But deep below these towering metropolises, hidden within the belly of the earth, lay remnants of a bygone era._
 
-Whispers of legend spoke of an ancient altar concealed within the deepest chambers of the mines. A place of power where the old world met the new. As the dwarves tunneled deeper into the earth, they discovered the altar and soon realized its potential. Using its arcane energy, they merged ancient craftsmanship with futuristic tech, creating powerful artifacts and defenses for their community. But as with all things of great power, it attracted the eyes of those who desired control.
+_Dvalin, the last cybernetic dwarf of a once-thriving underground colony, awakens amidst the ruins of his home. Crimson hair flickering like a beacon in the dark, circuits embedded into his skin pulse with a dim glow. Memories of laughter, community, and machines harmonizing their tasks were now replaced by eerie silence, broken only by the low hum of forgotten machinery._
 
-Soon, autonomous mining drones, programmed to seek resources, began their descent into the mines. Their protocols corrupted, they sought the altar's power. Monstrous creatures, drawn from the depths by the altar's allure, also ventured forth. The once peaceful colony became a battleground, with Dvalin's kin fighting bravely but eventually succumbing to the overwhelming forces.
+_Whispers of legend spoke of an ancient altar concealed within the deepest chambers of the mines. A place of power where the old world met the new. As the dwarves tunneled deeper into the earth, they discovered the altar and soon realized its potential. Using its arcane energy, they merged ancient craftsmanship with futuristic tech, creating powerful artifacts and defenses for their community. But as with all things of great power, it attracted the eyes of those who desired control._
 
-Now, the lone survivor, Dvalin's mission is clear. Traverse the haunting voids of the mine, confront the menacing drones and lurking creatures, gather their components, and harness the altar's mysterious powers. The very essence of his people, their history, and their future lies within his cybernetic grasp. The echoes of the forgotten mine call out, and Dvalin must respond. For he is the last hope of a legacy that refuses to fade into the shadows.
-```
+_Soon, autonomous mining drones, programmed to seek resources, began their descent into the mines. Their protocols corrupted, they sought the altar's power. Monstrous creatures, drawn from the depths by the altar's allure, also ventured forth. The once peaceful colony became a battleground, with Dvalin's kin fighting bravely but eventually succumbing to the overwhelming forces._
+
+_Now, the lone survivor, Dvalin's mission is clear. Traverse the haunting voids of the mine, confront the menacing drones and lurking creatures, gather their components, and harness the altar's mysterious powers. The very essence of his people, their history, and their future lies within his cybernetic grasp. The echoes of the forgotten mine call out, and Dvalin must respond. For he is the last hope of a legacy that refuses to fade into the shadows._
+
 
 ## Demo:
 
