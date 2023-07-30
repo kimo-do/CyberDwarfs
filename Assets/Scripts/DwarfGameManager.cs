@@ -177,7 +177,22 @@ public class DwarfGameManager : MonoBehaviour
             if (availableSlimeSpawns.Count > 0)
             {
                 GameObject enemy = Instantiate(slimeEnemyPfb);
-                Transform rdnSpawn = availableSlimeSpawns[UnityEngine.Random.Range(0, availableSlimeSpawns.Count)];
+
+                Transform biggestDistance = availableSlimeSpawns[0];
+                float distance = 0;
+
+                foreach (var sp in availableSlimeSpawns)
+                {
+                    float newDistance = Vector2.Distance(sp.position, DwarfController.instance.transform.position);
+
+                    if (newDistance > distance)
+                    {
+                        distance = newDistance;
+                        biggestDistance = sp;
+                    }
+                }
+
+                Transform rdnSpawn = biggestDistance; //availableSlimeSpawns[UnityEngine.Random.Range(0, availableSlimeSpawns.Count)];
                 Vector2 rdnspawnpos = rdnSpawn.position;
                 enemy.transform.position = rdnspawnpos;
                 Enemy enemyScript = enemy.GetComponent<Enemy>();

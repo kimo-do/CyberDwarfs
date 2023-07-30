@@ -1,9 +1,9 @@
 {
-  "name": "Echoes of the Forge",
-  "version": "0.0.1",
+  "name": "The Last Dwarf",
+  "version": "0.0.2",
   "storage": "aws",
-  "description": "Unravel mysteries. Upgrade relentlessly. Rekindle dwarven legacy.",
-  "website": "http://wao.gg",
+  "description": "Rekindle dwarven legacy.",
+  "website": "https://discord.gg/Vxx3Um6XfA",
   "kind": "app",
   "tag": "game",
   "icon": {
@@ -11,7 +11,11 @@
   },
   "contact": "https://discord.gg/Vxx3Um6XfA",
   "screenshots": [
-    "./assets/screenShot.jpg"
+    "./assets/screenshot_1.png",
+    "./assets/screenshot_2.png",
+    "./assets/screenshot_3.png",
+    "./assets/screenshot_4.png",
+    "./assets/screenshot_5.png"
   ],
   "entrypoints": {
     "default": {

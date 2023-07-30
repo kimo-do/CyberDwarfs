@@ -40,29 +40,34 @@ public class WalkingEnemy : MonoBehaviour
                     {
                         if (!enemy.IsAttacking)
                         {
+                            RaycastHit2D rightHit = Physics2D.Raycast(checkRight.position, Vector2.down, 5f);
+                            RaycastHit2D leftHit = Physics2D.Raycast(checkLeft.position, Vector2.down, 5f);
                             RaycastHit2D currentHit = new RaycastHit2D();
 
                             if (currentMoveDir.x > 0)
                             {
-                                currentHit = Physics2D.Raycast(checkRight.position, Vector2.down, 5f);
+                                currentHit = rightHit;
                             }
                             else if (currentMoveDir.x < 0)
                             {
-                                currentHit = Physics2D.Raycast(checkLeft.position, Vector2.down, 5f);
+                                currentHit = leftHit;
                             }
 
-                            if (currentHit.collider == null)
+                            if ((rightHit.collider != null && rightHit.distance < 0.5f) ||( leftHit.collider != null && leftHit.distance < 0.5f))
                             {
-                                rb.velocity = Vector2.zero;
-                                currentMoveDir *= -1;
-                            }
-                            else if (currentHit.distance > 0.5f)
-                            {
-                                rb.velocity = Vector2.zero;
-                                currentMoveDir *= -1;
-                            }
+                                if (currentHit.collider == null)
+                                {
+                                    rb.velocity = Vector2.zero;
+                                    currentMoveDir *= -1;
+                                }
+                                else if (currentHit.distance > 0.5f)
+                                {
+                                    rb.velocity = Vector2.zero;
+                                    currentMoveDir *= -1;
+                                }
 
-                            rb.velocity = new Vector2(currentMoveDir.x, rb.velocity.y);
+                                rb.velocity = new Vector2(currentMoveDir.x, rb.velocity.y);
+                            }
                         }
                     }
                 }

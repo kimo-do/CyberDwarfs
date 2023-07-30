@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TarodevController;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
@@ -81,22 +82,25 @@ public class DwarfController : MonoBehaviour
     private void Update()
     {
         // Basic attack
-        if (Input.GetMouseButtonDown(0))
+        if (!IsPointerOverUIElement())
         {
-            if (Time.time - lastAttackTime >= AttackTime)
+            if (Input.GetMouseButtonDown(0))
             {
-                DoAttack();
-                lastAttackTime = Time.time;
+                if (Time.time - lastAttackTime >= AttackTime)
+                {
+                    DoAttack();
+                    lastAttackTime = Time.time;
+                }
             }
-        }
 
-        // Shoot attack
-        if (Input.GetMouseButtonDown(1))
-        {
-            if (Time.time - lastAttackTime >= AttackTime)
+            // Shoot attack
+            if (Input.GetMouseButtonDown(1))
             {
-                DoShoot();
-                lastAttackTime = Time.time;
+                if (Time.time - lastAttackTime >= AttackTime)
+                {
+                    DoShoot();
+                    lastAttackTime = Time.time;
+                }
             }
         }
 
@@ -104,6 +108,36 @@ public class DwarfController : MonoBehaviour
         Vector2 lookAtMouse = mousePosWorld - (Vector2)hitCircle.position;
         hitCircle.right = lookAtMouse;
         gun.right = lookAtMouse;
+    }
+
+    //Returns 'true' if we touched or hovering on Unity UI element.
+    public static bool IsPointerOverUIElement()
+    {
+        return IsPointerOverUIElement(GetEventSystemRaycastResults());
+    }
+
+
+    //Returns 'true' if we touched or hovering on Unity UI element.
+    public static bool IsPointerOverUIElement(List<RaycastResult> eventSystemRaysastResults)
+    {
+        for (int index = 0; index < eventSystemRaysastResults.Count; index++)
+        {
+            RaycastResult curRaysastResult = eventSystemRaysastResults[index];
+            if (curRaysastResult.gameObject.layer == LayerMask.NameToLayer("UI"))
+                return true;
+        }
+        return false;
+    }
+
+
+    //Gets all event system raycast results of current mouse or touch position.
+    public static List<RaycastResult> GetEventSystemRaycastResults()
+    {
+        PointerEventData eventData = new PointerEventData(EventSystem.current);
+        eventData.position = Input.mousePosition;
+        List<RaycastResult> raysastResults = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventData, raysastResults);
+        return raysastResults;
     }
 
     private Coroutine hideGunRoutine;

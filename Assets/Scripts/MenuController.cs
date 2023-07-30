@@ -28,6 +28,9 @@ public class MenuController : MonoBehaviour
     [SerializeField] private GameObject heartTemplate;
     [SerializeField] private GameObject armourTemplate;
     [SerializeField] private GameObject upgradeTemplate;
+    public Sprite mutedSprite;
+    public Sprite unmutedSprite;
+    public Button muteButton;
 
     // Upgrades
     public UpgradeButton upgrade1btn;
@@ -45,14 +48,19 @@ public class MenuController : MonoBehaviour
     // NFT
     public Button connectWalletBtn;
     public TextMeshProUGUI connectStatusText;
-
+    public Color defaultColor;
+    public Color connectedColor;
+    public Sprite walletIcon;
+    public Sprite backpackIcon;
 
     private List<GameObject> spawnedLivesUI = new();
     private List<GameObject> spawnedArmourUI = new();
     private List<GameObject> spawnedUpgradesUI = new();
 
-
+    private bool isMuted = false;
     private bool startedGame = false;
+    private bool hasOpenUpgradePick;
+
 
     public bool HasOpenAnvil { get; set; }
 
@@ -73,6 +81,23 @@ public class MenuController : MonoBehaviour
         instance = this;
 
         connectWalletBtn.onClick.AddListener(LoginCheckerWalletAdapter);
+        muteButton.onClick.AddListener(OnMute);
+    }
+
+    private void OnMute()
+    {
+        isMuted = !isMuted;
+
+        if (isMuted)
+        {
+            muteButton.GetComponent<Image>().sprite = mutedSprite;
+        }
+        else
+        {
+            muteButton.GetComponent<Image>().sprite = unmutedSprite;
+        }
+
+        AudioManager.instance.ToggleMute(isMuted);
     }
 
     private void Start()
@@ -81,7 +106,21 @@ public class MenuController : MonoBehaviour
         introScreen.gameObject.SetActive(true);
 
         StartCoroutine(ShowTipAfterWhile());
+
+        if (Application.platform == RuntimePlatform.WebGLPlayer)
+        {
+            StartCoroutine(DoAfterFrames());
+        }
     }
+
+    IEnumerator DoAfterFrames()
+    {
+        yield return new WaitForEndOfFrame();
+        yield return new WaitForEndOfFrame();
+        LoginCheckerWalletAdapter();
+    }
+
+    private bool tipIsShowing = false;
 
     IEnumerator ShowTipAfterWhile()
     {
@@ -93,12 +132,24 @@ public class MenuController : MonoBehaviour
             backpackTip["Tip"].speed = 1f;
             backpackTip.Play("Tip");
 
+            tipIsShowing = true;
+
             yield return new WaitForSeconds(7f);
 
+            CloseTipNow();
+        }
+    }
+
+    public void CloseTipNow()
+    {
+        if (tipIsShowing)
+        {
             backpackTip["Tip"].time = backpackTip["Tip"].length;
             backpackTip["Tip"].speed = -1f;
             backpackTip.Play("Tip");
         }
+
+        tipIsShowing = false;
     }
 
     public void StartGame()
@@ -154,6 +205,16 @@ public class MenuController : MonoBehaviour
         }
 
         AfterFade?.Invoke();
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            ScreenCapture.CaptureScreenshot($"dwarf_{DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss")}.png");
+            ScreenCapture.CaptureScreenshot($"dwarf_{DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss")}_Super.png", 2);
+
+        }
     }
 
     public void InitLives(int Lives)
@@ -223,6 +284,7 @@ public class MenuController : MonoBehaviour
             DwarfGameManager.instance.Components = DwarfGameManager.instance.Components - 3;
             SetCompononents(DwarfGameManager.instance.Components);
             CloseUpgradeScreen();
+            hasOpenUpgradePick = false;
 
             if (DwarfGameManager.instance.Components >= 3)
             {
@@ -286,41 +348,44 @@ public class MenuController : MonoBehaviour
         DwarfController.instance.enabled = false;    
         PlayerController.instance.enabled = false;
         Time.timeScale = 0f;
-
         errText.gameObject.SetActive(false);
 
-        List<Upgrade> availableUpgrades = new(DwarfGameManager.instance.upgradePool);
-        availableUpgrades.RemoveAll(u => DwarfGameManager.instance.AppliedUpgrades.Contains(u));
-
-        upgrade1btn.gameObject.SetActive(false); upgrade2btn.gameObject.SetActive(false); upgrade3btn.gameObject.SetActive(false);
-
-        Upgrade rdnUpgrade = null;
-
-        if (availableUpgrades.Count > 0)
+        if (!hasOpenUpgradePick)
         {
-            rdnUpgrade = availableUpgrades[UnityEngine.Random.Range(0, availableUpgrades.Count)];
-            upgrade1btn.SetUpgrade(rdnUpgrade);
-            upgrade1btn.gameObject.SetActive(true);
-            availableUpgrades.Remove(rdnUpgrade);
-        }
+            List<Upgrade> availableUpgrades = new(DwarfGameManager.instance.upgradePool);
+            availableUpgrades.RemoveAll(u => DwarfGameManager.instance.AppliedUpgrades.Contains(u));
 
-        if (availableUpgrades.Count > 0)
-        {
-            rdnUpgrade = availableUpgrades[UnityEngine.Random.Range(0, availableUpgrades.Count)];
-            upgrade2btn.SetUpgrade(rdnUpgrade);
-            upgrade2btn.gameObject.SetActive(true);
-            availableUpgrades.Remove(rdnUpgrade);
-        }
+            upgrade1btn.gameObject.SetActive(false); upgrade2btn.gameObject.SetActive(false); upgrade3btn.gameObject.SetActive(false);
 
-        if (availableUpgrades.Count > 0)
-        {
-            rdnUpgrade = availableUpgrades[UnityEngine.Random.Range(0, availableUpgrades.Count)];
-            upgrade3btn.SetUpgrade(rdnUpgrade);
-            upgrade3btn.gameObject.SetActive(true);
-            availableUpgrades.Remove(rdnUpgrade);
+            Upgrade rdnUpgrade = null;
+
+            if (availableUpgrades.Count > 0)
+            {
+                rdnUpgrade = availableUpgrades[UnityEngine.Random.Range(0, availableUpgrades.Count)];
+                upgrade1btn.SetUpgrade(rdnUpgrade);
+                upgrade1btn.gameObject.SetActive(true);
+                availableUpgrades.Remove(rdnUpgrade);
+            }
+
+            if (availableUpgrades.Count > 0)
+            {
+                rdnUpgrade = availableUpgrades[UnityEngine.Random.Range(0, availableUpgrades.Count)];
+                upgrade2btn.SetUpgrade(rdnUpgrade);
+                upgrade2btn.gameObject.SetActive(true);
+                availableUpgrades.Remove(rdnUpgrade);
+            }
+
+            if (availableUpgrades.Count > 0)
+            {
+                rdnUpgrade = availableUpgrades[UnityEngine.Random.Range(0, availableUpgrades.Count)];
+                upgrade3btn.SetUpgrade(rdnUpgrade);
+                upgrade3btn.gameObject.SetActive(true);
+                availableUpgrades.Remove(rdnUpgrade);
+            }
         }
 
         upgradeScreen.gameObject.SetActive(true);
+        hasOpenUpgradePick = true;
     }
 
 
@@ -343,13 +408,16 @@ public class MenuController : MonoBehaviour
             //messageTxt.gameObject.SetActive(false);
             //gameObject.SetActive(false);
             connectStatusText.text = "Connected";
+            connectWalletBtn.GetComponent<Image>().color = connectedColor;
         }
         else
         {
             // wallet connect failed
             //passwordInputField.text = string.Empty;
             //messageTxt.gameObject.SetActive(true);
-            connectStatusText.text = "Connect";
+            connectStatusText.text = "";
+            connectWalletBtn.GetComponent<Image>().color = defaultColor;
+
         }
     }
 }
