@@ -16,6 +16,9 @@ _Soon, autonomous mining drones, programmed to seek resources, began their desce
 
 _Now, the lone survivor, Dvalin's mission is clear. Traverse the haunting voids of the mine, confront the menacing drones and lurking creatures, gather their components, and harness the altar's mysterious powers. The very essence of his people, their history, and their future lies within his cybernetic grasp. The echoes of the forgotten mine call out, and Dvalin must respond. For he is the last hope of a legacy that refuses to fade into the shadows._
 
+## Upgrade
+
+The theme of this gamejam was 'upgrade'. We decided to let the whole game revolve around this theme by allowing the character to forge upgrades for their body and armour. The game's difficulty is increased with every passing minute so it is essential that you keep upgrading your dwarf to be able to handle the incoming threats. At max upgrades you _might_ go into **c y b e r o v e r l o a d**
 
 ## Demo:
 
