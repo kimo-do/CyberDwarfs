@@ -33,6 +33,8 @@ public class DwarfController : MonoBehaviour
     public float OrbBulletSpeed { get; set; }
     public float AttackTime { get; set; }
     public float ShootTime { get; set; }
+
+    public bool Invulnerable {  get; set; }
     public Rigidbody2D Rb { get => rb; set => rb = value; }
 
     private float lastAttackTime;
@@ -78,7 +80,9 @@ public class DwarfController : MonoBehaviour
                         PlayerController.instance.ApplyVelocity(awayFromPlayerDir * 50f, PlayerForce.Burst);
                         //enemy.Bounce(awayFromPlayerDir);
 
-                        DwarfGameManager.instance.LooseLive();
+
+                            DwarfGameManager.instance.LooseLive();
+                        
                     }
                 }
             }

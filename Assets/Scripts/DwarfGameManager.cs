@@ -29,16 +29,21 @@ public class DwarfGameManager : MonoBehaviour
     public List<VisualNFT> ingameNftsScreens;
     private Dictionary<VisualNFT, bool> usedScreens = new();
 
+    public GameObject crazyModeBG;
+
     public Volume globalVolume;
+    public Volume crazyModeVolume;
 
 
     [Header("Settings")]
     [SerializeField] private int defaultLives;
 
+
     public int Lives { get; set; }
 
     public int Components { get; set; }
     public bool IsPlayerDeath { get => isPlayerDeath; set => isPlayerDeath = value; }
+
     public List<Upgrade> AppliedUpgrades { get => appliedUpgrades; set => appliedUpgrades = value; }
 
     private float lastEnemySpawn;
@@ -103,6 +108,70 @@ public class DwarfGameManager : MonoBehaviour
         }
     }
 
+    private bool isInCrazyMode = false;
+
+    public void EnableCrazyMode()
+    {
+        if (!isInCrazyMode)
+        {
+            isInCrazyMode = true;
+            StartCoroutine(CrazyMode());
+        }
+    }
+
+    IEnumerator CrazyMode()
+    {
+        while(crazyModeVolume.weight < 1f)
+        {
+            crazyModeVolume.weight += Time.deltaTime;
+            yield return new WaitForEndOfFrame();
+        }
+
+        crazyModeBG.gameObject.SetActive(true);
+        DwarfController.instance.shieldEffect.gameObject.SetActive(true);
+        MenuController.instance.overloadText.gameObject.SetActive(true);
+
+        float currentAtkTime = DwarfController.instance.AttackTime;
+        float currentShootTime = DwarfController.instance.ShootTime;
+        int currentAtkDmg = DwarfController.instance.Damage;
+        int currentShootDmg = DwarfController.instance.ShootDamage;
+        int currentAirJumps = PlayerController.instance.PlayerStats.MaxAirJumps;
+
+        DwarfController.instance.Invulnerable = true;
+        DwarfController.instance.AttackTime = 0.1f;
+        DwarfController.instance.ShootTime = 0.1f;
+        DwarfController.instance.Damage = 200;
+        DwarfController.instance.ShootDamage = 200;
+        PlayerController.instance.PlayerStats.MaxAirJumps = 10;
+        PlayerController.instance.ResetAirJumps();
+
+
+        yield return new WaitForSeconds(20f);
+
+
+        DwarfController.instance.Invulnerable = false;
+        DwarfController.instance.AttackTime = currentAtkTime;
+        DwarfController.instance.ShootTime = currentShootTime;
+        DwarfController.instance.Damage = currentAtkDmg;
+        DwarfController.instance.ShootDamage = currentShootDmg;
+        PlayerController.instance.PlayerStats.MaxAirJumps = currentAirJumps;
+        PlayerController.instance.ResetAirJumps();
+
+        DwarfController.instance.shieldEffect.gameObject.SetActive(false);
+        MenuController.instance.overloadText.gameObject.SetActive(false);
+
+
+        crazyModeBG.gameObject.SetActive(false);
+
+        while (crazyModeVolume.weight > 0f)
+        {
+            crazyModeVolume.weight -= Time.deltaTime;
+            yield return new WaitForEndOfFrame();
+        }
+
+        isInCrazyMode = false;
+    }
+
     public void SpawnBullet(Vector2 from, Vector2 direction, int damage, bool ally = false)
     {
         GameObject newBullet = Instantiate(ally ? allyBulletPfb : bulletPfb, from, Quaternion.identity);
@@ -147,6 +216,7 @@ public class DwarfGameManager : MonoBehaviour
     public void LooseLive()
     {
         if (isPlayerDeath) return;
+        if (DwarfController.instance.Invulnerable) return;
 
         Lives--;
 
@@ -205,6 +275,12 @@ public class DwarfGameManager : MonoBehaviour
             GameObject enemy = Instantiate(enemyPfb);
             Enemy enemyScript = enemy.GetComponent<Enemy>();
             enemyScript.ID = Enemy.NewId;
+
+            if (Enemy.OrbAttackInterval < 0.001f)
+            {
+                Enemy.OrbAttackInterval = enemyScript.attackInterval;
+            }
+
             Vector2 rdnspawnpos = enemySpawns[UnityEngine.Random.Range(0, enemySpawns.Count)].position;
             enemy.transform.position = rdnspawnpos;
             lastEnemySpawn = Time.time;
@@ -248,6 +324,7 @@ public class DwarfGameManager : MonoBehaviour
         {
             slimeSpawnTimer *= 0.8f;
             orbSpawnTimer *= 0.8f;
+            Enemy.OrbAttackInterval *= 0.9f;
             lastGameDifficultyIncrease = Time.time;
         }
 
@@ -415,6 +492,11 @@ public class DwarfGameManager : MonoBehaviour
                 GainLive();
                 GainLive();
                 break;
+        }
+
+        if (AppliedUpgrades.Count >= upgradePool.Count)
+        {
+            EnableCrazyMode();
         }
     }
 

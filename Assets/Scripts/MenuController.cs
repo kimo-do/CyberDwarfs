@@ -41,6 +41,7 @@ public class MenuController : MonoBehaviour
     public Sprite meleeIcon;
     public Sprite rangedIcon;
     public Sprite miscIcon;
+    public TextMeshProUGUI overloadText;
 
     public TextMeshProUGUI componentsCountText;
     public TextMeshProUGUI upgradeAvailableText;

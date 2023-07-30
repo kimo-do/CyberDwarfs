@@ -28,6 +28,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    public static float OrbAttackInterval { get; set; }
     public int CurrentHealth { get; set; }
     public int MaxHealth { get; set; }
 
@@ -180,7 +181,7 @@ public class Enemy : MonoBehaviour
 
     public void Attack()
     {
-        if (Time.time - LastAttackTime > attackInterval)
+        if (Time.time - LastAttackTime > OrbAttackInterval)
         {
             if (!DwarfGameManager.instance.IsPlayerDeath)
             {

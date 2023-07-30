@@ -30165,12 +30165,13 @@ MonoBehaviour:
   gun: {fileID: 610354066121514133}
   gunNossle: {fileID: 7066384748976536110}
   swooshAnim: {fileID: 1516044124108820750}
-  shieldEffect: {fileID: 0}
+  shieldEffect: {fileID: 7247866228878471246}
   defaultDamage: 60
   defaultBulletDamage: 40
   defaultAllyBulletSpeed: 10
   defaultenemyBulletSpeed: 5
   defaultAttackTime: 0.3
+  defaultShootTime: 0.6
 --- !u!1 &3836054527797046537
 GameObject:
   m_ObjectHideFlags: 0
@@ -40572,5 +40573,10 @@ PrefabInstance:
 --- !u!4 &1038439712268373074 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6122829946585073163, guid: 8c3610c55b78de9478b60d7d287a5018, type: 3}
+  m_PrefabInstance: {fileID: 6526259087124564569}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &7247866228878471246 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 4468830736591387159, guid: 8c3610c55b78de9478b60d7d287a5018, type: 3}
   m_PrefabInstance: {fileID: 6526259087124564569}
   m_PrefabAsset: {fileID: 0}
