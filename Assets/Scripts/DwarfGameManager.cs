@@ -38,7 +38,7 @@ public class DwarfGameManager : MonoBehaviour
     [Header("Settings")]
     [SerializeField] private int defaultLives;
 
-
+    public int TotalKills { get; set; }
     public int Lives { get; set; }
 
     public int Components { get; set; }
@@ -90,6 +90,7 @@ public class DwarfGameManager : MonoBehaviour
     {
         Initialize();
         lastGameDifficultyIncrease = Time.time;
+        lastEnemySpawn = Time.time - 200f;
         StartCoroutine(ShowNFTS());
     }
     
@@ -276,7 +277,7 @@ public class DwarfGameManager : MonoBehaviour
             Enemy enemyScript = enemy.GetComponent<Enemy>();
             enemyScript.ID = Enemy.NewId;
 
-            if (Enemy.OrbAttackInterval < 0.001f)
+            if (Enemy.OrbAttackInterval == 0)
             {
                 Enemy.OrbAttackInterval = enemyScript.attackInterval;
             }
@@ -355,6 +356,7 @@ public class DwarfGameManager : MonoBehaviour
         }
 
         Components++;
+        TotalKills++;
 
         if (Components >= 3)
         {
@@ -388,6 +390,18 @@ public class DwarfGameManager : MonoBehaviour
         {
             colorAdjust.saturation.value = colorAdjust.saturation.value - Time.deltaTime * 60f;
             yield return null;
+        }
+
+        yield return new WaitForSeconds(1f);
+
+        CanvasGroup group = MenuController.instance.deathscreen.GetComponent<CanvasGroup>();
+
+        MenuController.instance.killsText.text = "Total kills: " + TotalKills.ToString();
+
+        while (group.alpha < 1f)
+        {
+            group.alpha += Time.deltaTime * 0.5f;
+            yield return new WaitForEndOfFrame();
         }
 
         yield return new WaitForSeconds(2f);

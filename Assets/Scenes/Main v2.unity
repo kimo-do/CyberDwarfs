@@ -42270,6 +42270,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: EnemyOrb
       objectReference: {fileID: 0}
+    - target: {fileID: 7370292720460250627, guid: d51d7ff584d6fe541a1e073ece6f25a5, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

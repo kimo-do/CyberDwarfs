@@ -18,6 +18,7 @@ public class MenuController : MonoBehaviour
     public RectTransform introScreen;
     public RectTransform mainGameScreen;
     public RectTransform upgradeScreen;
+    public RectTransform deathscreen;
     public RectTransform upgradesBar;
     public CanvasGroup fadeToBlack;
     public Animation backpackTip;
@@ -42,6 +43,8 @@ public class MenuController : MonoBehaviour
     public Sprite rangedIcon;
     public Sprite miscIcon;
     public TextMeshProUGUI overloadText;
+    public TextMeshProUGUI killsText;
+
 
     public TextMeshProUGUI componentsCountText;
     public TextMeshProUGUI upgradeAvailableText;
@@ -168,6 +171,7 @@ public class MenuController : MonoBehaviour
     public void LoadFirstScene()
     {
         introScreen.gameObject.SetActive(false);
+        deathscreen.GetComponent<CanvasGroup>().alpha = 0f;
         StartCoroutine(LoadFirstSceneAsync());
     }
 
