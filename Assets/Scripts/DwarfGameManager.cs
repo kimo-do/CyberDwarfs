@@ -48,8 +48,8 @@ public class DwarfGameManager : MonoBehaviour
 
     private float lastEnemySpawn;
     private float lastSlimeSpawn;
-    private float slimeSpawnTimer = 30f;
-    private float orbSpawnTimer = 15f;
+    private float slimeSpawnTimer = 20f;
+    private float orbSpawnTimer = 12f;
     private int maxLives = 10;
     private float lastGameDifficultyIncrease;
     private bool isPlayerDeath;
