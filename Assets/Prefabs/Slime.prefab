@@ -246,7 +246,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb0a7bd867484294a87f0f313d9c39fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 4.5
+  speed: 6
   checkLeft: {fileID: 4269212708224260169}
   checkRight: {fileID: 2778890774232001589}
 --- !u!1 &3538154580120163732
