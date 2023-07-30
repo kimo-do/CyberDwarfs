@@ -41,7 +41,7 @@ public class DwarfGameManager : MonoBehaviour
     public int TotalKills { get; set; }
     public int Lives { get; set; }
 
-    public int Components { get; set; }
+    public int Components = 0;
     public bool IsPlayerDeath { get => isPlayerDeath; set => isPlayerDeath = value; }
 
     public List<Upgrade> AppliedUpgrades { get => appliedUpgrades; set => appliedUpgrades = value; }
@@ -210,6 +210,7 @@ public class DwarfGameManager : MonoBehaviour
 
         MenuController.instance.InitLives(Lives);
         MenuController.instance.SetCompononents(Components);
+        MenuController.instance.ClearUpgrades();
 
         DwarfController.instance.transform.position = spawnPoint.position;
     }

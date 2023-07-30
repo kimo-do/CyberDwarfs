@@ -1950,7 +1950,11 @@ PrefabInstance:
     - target: {fileID: 6717981795949913763, guid: d1cf348a029d8d143b877fab552c4235, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1968334631}
+      objectReference: {fileID: 551547565}
+    - target: {fileID: 6717981795949913763, guid: d1cf348a029d8d143b877fab552c4235, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ClickedBtn
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 6002475318356616728, guid: d1cf348a029d8d143b877fab552c4235, type: 3}
     m_RemovedGameObjects: []
@@ -14456,7 +14460,11 @@ PrefabInstance:
     - target: {fileID: 6717981795949913763, guid: d1cf348a029d8d143b877fab552c4235, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1968334631}
+      objectReference: {fileID: 1913379183}
+    - target: {fileID: 6717981795949913763, guid: d1cf348a029d8d143b877fab552c4235, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ClickedBtn
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 6002475318356616728, guid: d1cf348a029d8d143b877fab552c4235, type: 3}
     m_RemovedGameObjects: []
